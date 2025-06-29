@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2025/06/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>欢迎来到我的技术博客</title>
+    <url>/2025/06/29/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0%E6%88%91%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h1 id="博客介绍"><a href="#博客介绍" class="headerlink" title="博客介绍"></a>博客介绍</h1><p>欢迎来到我的技术博客！这里是我记录学习编程心得、分享技术经验的地方。</p>
+<h2 id="博客目标"><a href="#博客目标" class="headerlink" title="博客目标"></a>博客目标</h2><h3 id="知识分享"><a href="#知识分享" class="headerlink" title="知识分享"></a>知识分享</h3><ul>
+<li>分享编程学习过程中的心得体会</li>
+<li>记录遇到的问题和解决方案</li>
+<li>整理有用的技术资源</li>
+</ul>
+<h3 id="技能提升"><a href="#技能提升" class="headerlink" title="技能提升"></a>技能提升</h3><ul>
+<li>通过写作加深对技术的理解</li>
+<li>培养表达和总结能力</li>
+<li>建立个人技术品牌</li>
+</ul>
+<h2 id="内容规划"><a href="#内容规划" class="headerlink" title="内容规划"></a>内容规划</h2><h3 id="技术文章"><a href="#技术文章" class="headerlink" title="技术文章"></a>技术文章</h3><p>主要涵盖以下技术领域：</p>
+<h4 id="前端开发"><a href="#前端开发" class="headerlink" title="前端开发"></a>前端开发</h4><ul>
+<li>HTML&#x2F;CSS 基础与进阶</li>
+<li>JavaScript 核心概念</li>
+<li>Vue.js&#x2F;React 框架学习</li>
+<li>响应式设计与用户体验</li>
+</ul>
+<h4 id="后端开发"><a href="#后端开发" class="headerlink" title="后端开发"></a>后端开发</h4><ul>
+<li>Node.js 服务端开发</li>
+<li>数据库设计与优化</li>
+<li>API 设计与开发</li>
+<li>微服务架构</li>
+</ul>
+<h4 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h4><ul>
+<li>Git 版本控制</li>
+<li>VS Code 使用技巧</li>
+<li>开发环境配置</li>
+<li>自动化部署</li>
+</ul>
+<h3 id="学习笔记"><a href="#学习笔记" class="headerlink" title="学习笔记"></a>学习笔记</h3><ul>
+<li>在线课程学习笔记</li>
+<li>技术书籍读后感</li>
+<li>项目实战总结</li>
+<li>面试准备经验</li>
+</ul>
+<h2 id="写作计划"><a href="#写作计划" class="headerlink" title="写作计划"></a>写作计划</h2><h3 id="定期更新"><a href="#定期更新" class="headerlink" title="定期更新"></a>定期更新</h3><ul>
+<li>每周至少发布一篇技术文章</li>
+<li>记录每日学习进度</li>
+<li>分享有趣的编程发现</li>
+</ul>
+<h3 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h3><p>计划推出以下系列：</p>
+<ul>
+<li>「从零开始学编程」系列</li>
+<li>「前端开发实战」系列</li>
+<li>「问题解决记录」系列</li>
+</ul>
+<h2 id="互动交流"><a href="#互动交流" class="headerlink" title="互动交流"></a>互动交流</h2><p>欢迎大家：</p>
+<ul>
+<li>在文章下方留言讨论</li>
+<li>提出问题和建议</li>
+<li>分享自己的经验</li>
+</ul>
+<p>让我们一起在编程的道路上成长进步！</p>
+<hr>
+<p><em>感谢您的关注，希望这个博客能对您有所帮助！</em></p>
+]]></content>
+      <categories>
+        <category>博客介绍</category>
+      </categories>
+      <tags>
+        <tag>博客</tag>
+        <tag>介绍</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+</search>

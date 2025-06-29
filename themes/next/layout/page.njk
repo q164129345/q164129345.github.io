@@ -36,6 +36,212 @@
           {%- include '_partials/page/categories.njk' -%}
         {% elif page.type === 'schedule' %}
           {%- include '_partials/page/schedule.njk' -%}
+        {% elif page.type === 'search' %}
+          <style>
+            .local-search {
+              max-width: 800px;
+              margin: 0 auto;
+              padding: 20px 0;
+            }
+            
+            .local-search-header {
+              margin-bottom: 30px;
+            }
+            
+            .local-search-input {
+              width: 100%;
+              padding: 15px 20px;
+              font-size: 18px;
+              border: 2px solid #e0e0e0;
+              border-radius: 10px;
+              outline: none;
+              transition: all 0.3s ease;
+              box-sizing: border-box;
+              background: #fff;
+              color: #333;
+              font-family: inherit;
+            }
+            
+            .local-search-input:focus {
+              border-color: #0084ff;
+              box-shadow: 0 0 10px rgba(0, 132, 255, 0.1);
+            }
+            
+            .local-search-input::placeholder {
+              color: #999;
+              font-size: 16px;
+            }
+            
+            .local-search-result {
+              margin-top: 30px;
+            }
+            
+            .search-result-item {
+              padding: 20px;
+              margin-bottom: 20px;
+              border: 1px solid #f0f0f0;
+              border-radius: 8px;
+              background: #fafafa;
+              transition: all 0.3s ease;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .search-result-item:hover {
+              background: #f5f5f5;
+              box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+              transform: translateY(-2px);
+            }
+            
+            .search-result-title {
+              font-size: 20px;
+              font-weight: bold;
+              margin-bottom: 10px;
+              line-height: 1.4;
+            }
+            
+            .search-result-title a {
+              color: #333;
+              text-decoration: none;
+              transition: color 0.3s ease;
+            }
+            
+            .search-result-title a:hover {
+              color: #0084ff;
+            }
+            
+            .search-result-content {
+              color: #666;
+              line-height: 1.6;
+              font-size: 14px;
+            }
+            
+            .search-result-highlight {
+              background-color: #fff3cd;
+              padding: 2px 4px;
+              border-radius: 3px;
+              font-weight: bold;
+              color: #856404;
+            }
+            
+            .search-no-result {
+              text-align: center;
+              color: #999;
+              padding: 40px 20px;
+              font-size: 16px;
+            }
+            
+            .search-error {
+              text-align: center;
+              color: #f56565;
+              padding: 40px 20px;
+              font-size: 16px;
+            }
+            
+            .search-stats {
+              color: #999;
+              font-size: 14px;
+              margin-bottom: 20px;
+              text-align: center;
+            }
+          </style>
+          
+          <div class="local-search">
+            <div class="local-search-header">
+              <input type="text" class="local-search-input" placeholder="输入关键词搜索文章..." />
+            </div>
+            <div class="search-stats" style="display: none;"></div>
+            <div class="local-search-result"></div>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var searchInput = document.querySelector('.local-search-input');
+              var searchResult = document.querySelector('.local-search-result');
+              var searchStats = document.querySelector('.search-stats');
+              
+              if (!searchInput || !searchResult) return;
+              
+              // 加载搜索数据
+              fetch('/search.xml')
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('搜索数据加载失败');
+                  }
+                  return response.text();
+                })
+                .then(data => {
+                  var parser = new DOMParser();
+                  var xml = parser.parseFromString(data, 'text/xml');
+                  var entries = xml.querySelectorAll('entry');
+                  
+                  var searchData = [];
+                  entries.forEach(function(entry) {
+                    var title = entry.querySelector('title').textContent;
+                    var content = entry.querySelector('content').textContent;
+                    var url = entry.querySelector('url').textContent;
+                    
+                    searchData.push({
+                      title: title,
+                      content: content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' '), // 移除HTML标签和多余空格
+                      url: url
+                    });
+                  });
+                  
+                  console.log('搜索数据加载完成，共', searchData.length, '篇文章');
+                  
+                  // 搜索功能
+                  searchInput.addEventListener('input', function() {
+                    var keyword = this.value.trim();
+                    if (!keyword) {
+                      searchResult.innerHTML = '';
+                      searchStats.style.display = 'none';
+                      return;
+                    }
+                    
+                    var startTime = Date.now();
+                    var keywordLower = keyword.toLowerCase();
+                    
+                    var results = searchData.filter(function(item) {
+                      return item.title.toLowerCase().includes(keywordLower) || 
+                             item.content.toLowerCase().includes(keywordLower);
+                    });
+                    
+                    var endTime = Date.now();
+                    var searchTime = endTime - startTime;
+                    
+                    // 显示搜索统计
+                    searchStats.innerHTML = '找到 ' + results.length + ' 个搜索结果（用时 ' + searchTime + ' 毫秒）';
+                    searchStats.style.display = 'block';
+                    
+                    if (results.length === 0) {
+                      searchResult.innerHTML = '<div class="search-no-result">没有找到相关内容，请尝试其他关键词</div>';
+                      return;
+                    }
+                    
+                    var html = '';
+                    results.forEach(function(item) {
+                      var highlightedTitle = item.title.replace(new RegExp(keyword, 'gi'), '<span class="search-result-highlight">$&</span>');
+                      var contentPreview = item.content.substring(0, 200);
+                      var highlightedContent = contentPreview.replace(new RegExp(keyword, 'gi'), '<span class="search-result-highlight">$&</span>');
+                      
+                      html += '<div class="search-result-item">';
+                      html += '<div class="search-result-title"><a href="' + item.url + '">' + highlightedTitle + '</a></div>';
+                      html += '<div class="search-result-content">' + highlightedContent + (item.content.length > 200 ? '...' : '') + '</div>';
+                      html += '</div>';
+                    });
+                    
+                    searchResult.innerHTML = html;
+                  });
+                  
+                  // 焦点到搜索框
+                  searchInput.focus();
+                })
+                .catch(function(error) {
+                  console.error('搜索数据加载失败:', error);
+                  searchResult.innerHTML = '<div class="search-error">搜索功能暂时不可用，请稍后再试</div>';
+                });
+            });
+          </script>
         {% else %}
           {{ page.content }}
         {%- endif %}
