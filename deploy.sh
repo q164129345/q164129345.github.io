@@ -10,6 +10,10 @@ echo "📦 清理并生成网站文件..."
 hexo clean
 hexo generate
 
+# 将生成的文件复制到根目录（GitHub Pages需要）
+echo "📋 复制网站文件到根目录..."
+cp -r public/* .
+
 # 检查是否有提交信息参数
 if [ $# -eq 0 ]; then
     COMMIT_MSG="更新博客内容 $(date '+%Y-%m-%d %H:%M:%S')"

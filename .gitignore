@@ -2,7 +2,18 @@
 node_modules/
 
 # 生成的网站文件
-# public/ - 注释掉这行，让public文件夹可以被提交
+public/
+
+# 允许根目录下的网站文件被提交
+!index.html
+!*.html
+!css/
+!js/
+!fancybox/
+!2025/
+!archives/
+!categories/
+!tags/
 
 # 临时文件
 db.json
