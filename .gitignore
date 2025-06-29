@@ -2,7 +2,7 @@
 node_modules/
 
 # 生成的网站文件
-public/
+# public/ - 注释掉这行，让public文件夹可以被提交
 
 # 临时文件
 db.json
