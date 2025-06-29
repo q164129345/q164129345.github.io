@@ -14,6 +14,10 @@ hexo generate
 echo "📋 复制网站文件到根目录..."
 cp -r public/* .
 
+# 确保.nojekyll文件存在（禁用Jekyll）
+echo "🚫 确保.nojekyll文件存在..."
+touch .nojekyll
+
 # 检查是否有提交信息参数
 if [ $# -eq 0 ]; then
     COMMIT_MSG="更新博客内容 $(date '+%Y-%m-%d %H:%M:%S')"
