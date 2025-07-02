@@ -1,22 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2025/06/29/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+    <title>STM32F103_Bootloader程序开发02 - Bootloader程序架构与STM32F103的Flash内存规划</title>
+    <url>/2025/07/03/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9102-Bootloader%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84%E4%B8%8ESTM32F103%E7%9A%84Flash%E5%86%85%E5%AD%98%E8%A7%84%E5%88%92/</url>
+    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250531202718.png?raw=true" alt="Bootloader程序架构图"><br>在工业设备和机器人项目中，固件远程升级能力已成为提升设备维护性与生命周期的关键手段。本文将围绕STM32平台，系统性介绍一个简洁、可靠的Bootloader程序设计思路。<br>我们将Bootloader核心流程划分为六大功能模块：</p>
+<ol>
+<li>启动入口与升级模式判断</li>
+<li>通讯协议与指令解析</li>
+<li>固件接收与缓存</li>
+<li>Flash操作</li>
+<li>App跳转</li>
+<li>校验CRC32</li>
+</ol>
+<p>每个模块各司其职，既保证了流程的清晰、易维护，又为后续功能拓展（如安全保护、异常处理）预留了接口。通过模块化设计，能够高效实现与上位机的安全固件升级，显著提升系统的可靠性和可维护性。</p>
+<h1 id="Flash内存规划"><a href="#Flash内存规划" class="headerlink" title="Flash内存规划"></a>Flash内存规划</h1><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525112656.png?raw=true" alt="STM32F103 Flash内存分区图"></p>
+<ol>
+<li><p><strong>bootloader区</strong></p>
+<ul>
+<li>起始地址：0x08000000</li>
+<li>结束地址：0x0800FFFF</li>
+<li>大小：64KB，64KB 对于STM32F1系列的Bootloader来说很充裕，哪怕实现了自检、协议解析、升级管理、App校验等功能，也有足够空间。典型的Bootloader通常只用16~32KB就够了，这里预留较大，是为了后续扩展或协议变化更灵活，属于稳健做法。</li>
+</ul>
+</li>
+<li><p><strong>App区</strong></p>
+<ul>
+<li>起始地址：0x08010000</li>
+<li>结束地址：0x0803FFFF</li>
+<li>大小：192KB，192KB 足够一般工业&#x2F;机器人App使用（一般完整功能带RTOS、通信协议、复杂逻辑都能放下）。保证了App区块独立、可整体擦写与升级，方便Bootloader进行管理。</li>
+</ul>
+</li>
+<li><p><strong>App缓存区（固件下载区）</strong></p>
+<ul>
+<li>起始地址：0x08040000</li>
+<li>结束地址：0x0806FFFF</li>
+<li>大小：192KB</li>
+<li>下载新固件时，通常Bootloader先将完整固件文件存入缓存区，校验无误后再整体拷贝到App区，这样升级失败不会影响当前运行的App。</li>
+<li>192KB 与App区同样大小，保证可下载“完整体积的App”，合理且安全。避免了外部Flash，采用片上Flash空间做双区，适合资源有限的场合。</li>
+</ul>
+</li>
+<li><p><strong>参数区（自由使用）</strong></p>
+<ul>
+<li>起始地址：0x08070000</li>
+<li>结束地址：0x0807FFFF</li>
+<li>大小：64KB，64KB 远大于通常的参数&#x2F;配置&#x2F;校准区需求（实际很多项目1<del>2页即8</del>16KB即可），你这里留足余量，方便后续做历史数据、日志、频繁参数备份等。参数区建议采用“页擦写+参数备份+断电校验”策略，提高可靠性。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528145633.png?raw=true" alt="Flash分区详细布局图"></p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><h2 id="flash-map-h"><a href="#flash-map-h" class="headerlink" title="flash_map.h"></a>flash_map.h</h2><p>将上面的分区细节，落实到代码flash_map.h。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @file    flash_map.h</span></span><br><span class="line"><span class="comment"> * @brief   STM32F103ZET6 Flash分区地址与大小常量定义</span></span><br><span class="line"><span class="comment"> * @author  Wallace.zhang</span></span><br><span class="line"><span class="comment"> * @date    2025-05-25</span></span><br><span class="line"><span class="comment"> * @version 1.0.0</span></span><br><span class="line"><span class="comment"> * @copyright</span></span><br><span class="line"><span class="comment"> * (C) 2025 Wallace.zhang. 保留所有权利.</span></span><br><span class="line"><span class="comment"> * @license SPDX-License-Identifier: MIT</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __FLASH_MAP_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __FLASH_MAP_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * @brief STM32F103ZET6 Flash 基础参数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STM32_FLASH_BASE_ADDR      0x08000000U      <span class="comment">/**&lt; Flash起始基地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STM32_FLASH_SIZE           (512 * 1024U)    <span class="comment">/**&lt; Flash总大小（字节） */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STM32_FLASH_PAGE_SIZE      (2 * 1024U)      <span class="comment">/**&lt; Flash单页大小（字节） */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Bootloader区</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_BOOT_START_ADDR      0x08000000U      <span class="comment">/**&lt; Bootloader起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_BOOT_END_ADDR        0x0800FFFFU      <span class="comment">/**&lt; Bootloader结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_BOOT_SIZE            (FLASH_BOOT_END_ADDR - FLASH_BOOT_START_ADDR + 1) <span class="comment">/**&lt; Bootloader区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 主程序App区</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_APP_START_ADDR       0x08010000U      <span class="comment">/**&lt; App起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_APP_END_ADDR         0x0803FFFFU      <span class="comment">/**&lt; App结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_APP_SIZE             (FLASH_APP_END_ADDR - FLASH_APP_START_ADDR + 1)   <span class="comment">/**&lt; App区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief App缓存区（新固件下载区）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_DL_START_ADDR        0x08040000U      <span class="comment">/**&lt; 下载区起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_DL_END_ADDR          0x0806FFFFU      <span class="comment">/**&lt; 下载区结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_DL_SIZE              (FLASH_DL_END_ADDR - FLASH_DL_START_ADDR + 1)     <span class="comment">/**&lt; 下载区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 参数区（用户参数、历史数据等）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_PARAM_START_ADDR     0x08070000U      <span class="comment">/**&lt; 参数区起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_PARAM_END_ADDR       0x0807FFFFU      <span class="comment">/**&lt; 参数区结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_PARAM_SIZE           (FLASH_PARAM_END_ADDR - FLASH_PARAM_START_ADDR + 1) <span class="comment">/**&lt; 参数区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* __FLASH_MAP_H */</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h1 id="Keil配置"><a href="#Keil配置" class="headerlink" title="Keil配置"></a>Keil配置</h1><h2 id="bootloader程序的Keil配置"><a href="#bootloader程序的Keil配置" class="headerlink" title="bootloader程序的Keil配置"></a>bootloader程序的Keil配置</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184402.png?raw=true" alt="Bootloader程序Keil配置截图"></p>
+<h2 id="App程序的Keil配置"><a href="#App程序的Keil配置" class="headerlink" title="App程序的Keil配置"></a>App程序的Keil配置</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184622.png?raw=true" alt="App程序Keil配置截图"></p>
+<h1 id="细节补充"><a href="#细节补充" class="headerlink" title="细节补充"></a>细节补充</h1><h2 id="STM32F103ZET6的Flash布局"><a href="#STM32F103ZET6的Flash布局" class="headerlink" title="STM32F103ZET6的Flash布局"></a>STM32F103ZET6的Flash布局</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525185104.png?raw=true" alt="STM32F103ZET6 Flash页面布局"><br><strong>STM32F103ZET6属于大容量产品，内存块划分为256个2K字节页。</strong> 从这个知识可以得到如下信息：</p>
+<ol>
+<li>Bootloader：第0页到第31页（共32页）</li>
+<li>App：第32页到第127页（共96页）</li>
+<li>App缓存区：第128页到第223页（共96页）</li>
+<li>参数区：第224页到第255页（共32页）<br><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525185852.png?raw=true" alt="STM32F103ZET6 Flash页面分配详情"></li>
+</ol>
 ]]></content>
+      <categories>
+        <category>STM32</category>
+      </categories>
+      <tags>
+        <tag>STM32</tag>
+        <tag>bootloader</tag>
+      </tags>
   </entry>
   <entry>
     <title>欢迎来到我的技术博客</title>
@@ -85,6 +135,70 @@
         <tag>博客</tag>
         <tag>介绍</tag>
         <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2025/06/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？</title>
+    <url>/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/</url>
+    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p>这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。</p>
+<h1 id="什么是IAP-In-Application-Programming-？"><a href="#什么是IAP-In-Application-Programming-？" class="headerlink" title="什么是IAP(In-Application Programming)？"></a>什么是IAP(In-Application Programming)？</h1><p><strong>IAP，中文一般称为”应用程序内编程”或”在应用中自编程”。本质含义：MCU 在运行用户代码（App或Bootloader）时，通过自身的代码（而不是用外部编程器&#x2F;仿真器）来擦写和更新片上 Flash 内容。</strong> 典型的应用场景：在系统上线后，通过串口、CAN、USB、以太网等接口下载新固件，并写入指定Flash区，完成固件升级。</p>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true" alt="IAP示意图"></p>
+<p>实际场景：工程师用串口工具将固件下载到MCU，MCU通过IAP代码将固件烧写到App区。</p>
+<h1 id="什么是OTA-Over-The-Air，空中下载-升级-？"><a href="#什么是OTA-Over-The-Air，空中下载-升级-？" class="headerlink" title="什么是OTA(Over-The-Air，空中下载&#x2F;升级)？"></a>什么是OTA(Over-The-Air，空中下载&#x2F;升级)？</h1><p><strong>OTA，直译就是”空中下载”或者”远程升级”。本质含义：利用无线通信（如WiFi、蓝牙、NB-IoT、4G&#x2F;5G等），将新固件从服务器下载到设备，再进行固件升级。</strong> </p>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523093121.png?raw=true" alt="OTA示意图"></p>
+<p>实际场景：产品上线后，用户用手机APP或者设备自己通过WiFi下载新固件，MCU下载完成后，通过IAP流程将固件写入App区。</p>
+<h1 id="IAP跟OTA有什么关系？"><a href="#IAP跟OTA有什么关系？" class="headerlink" title="IAP跟OTA有什么关系？"></a>IAP跟OTA有什么关系？</h1><ul>
+<li>IAP 是一种升级机制&#x2F;技术，它是固件升级的基础能力，让MCU可以自我更新程序。</li>
+<li>OTA 是一种升级方式&#x2F;场景，它是一套”如何把新固件送到设备”+”触发升级流程”的完整解决方案，实现的底层依赖于IAP。</li>
+</ul>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105207.png?raw=true" alt="IAP与OTA关系图"></p>
+<p>总的来说：</p>
+<ul>
+<li>OTA &#x3D; 固件无线传输 + 本地IAP写入</li>
+<li>IAP 可以独立使用，比如通过串口&#x2F;USB升级（有线IAP）。</li>
+<li>OTA 一定要依赖IAP，否则固件即使下载下来，MCU也无法自我刷新。</li>
+</ul>
+<h1 id="Bootloader跟IAP又是什么关系？"><a href="#Bootloader跟IAP又是什么关系？" class="headerlink" title="Bootloader跟IAP又是什么关系？"></a>Bootloader跟IAP又是什么关系？</h1><h2 id="Bootloader是什么？"><a href="#Bootloader是什么？" class="headerlink" title="Bootloader是什么？"></a>Bootloader是什么？</h2><p>Bootloader（引导加载程序），是上电后第一个运行的程序，主要负责以下几个任务：</p>
+<ul>
+<li>系统初始化（最小外设&#x2F;时钟&#x2F;内存等）</li>
+<li>判断启动条件（决定启动App，还是进入升级模式）</li>
+<li>稳定地加载、校验和跳转到主应用（App）</li>
+<li>实现固件升级流程（IAP）</li>
+<li>有时还提供如参数恢复、生产测试等功能</li>
+</ul>
+<p><strong>它是设备”最后一道自救保险”。只要Bootloader没被破坏，哪怕App区彻底损坏，仍然能远程&#x2F;本地恢复设备，防止”变砖”。</strong> 在STM32系统里，Bootloader一般烧录在Flash的最前面一段区域（比如0x08000000~0x0800FFFF），具有独立的启动入口。</p>
+<h2 id="跟IAP的关系"><a href="#跟IAP的关系" class="headerlink" title="跟IAP的关系"></a>跟IAP的关系</h2><p><strong>Bootloader是IAP机制的载体，IAP功能一般是由Bootloader来实现的。</strong> 为什么不能在App上实现IAP？原因：</p>
+<ul>
+<li>安全性：Bootloader天然具备更高的安全级别，避免因App异常导致升级流程失控。</li>
+<li>健壮性：即使App区损坏，Bootloader仍可正常进入升级模式，保证设备可恢复。</li>
+<li>一致性：升级校验（如CRC、签名）由Bootloader统一处理，避免不同版本App间实现差异导致升级不兼容。</li>
+<li>启动机制：Bootloader能根据升级状态决定”升级 or 跳转App”，流程更清晰。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>STM32</category>
+      </categories>
+      <tags>
+        <tag>STM32</tag>
+        <tag>bootloader</tag>
       </tags>
   </entry>
 </search>

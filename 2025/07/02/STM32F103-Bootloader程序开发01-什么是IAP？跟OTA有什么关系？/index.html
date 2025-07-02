@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"q164129345.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.23.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="基于STM32F103ZET6的bootloader教程系列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？">
+<meta property="og:url" content="https://q164129345.github.io/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/index.html">
+<meta property="og:site_name" content="我的技术博客">
+<meta property="og:description" content="基于STM32F103ZET6的bootloader教程系列">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true">
+<meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523093121.png?raw=true">
+<meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105207.png?raw=true">
+<meta property="article:published_time" content="2025-07-02T15:18:05.000Z">
+<meta property="article:modified_time" content="2025-07-02T16:16:53.176Z">
+<meta property="article:author" content="Wallace">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="bootloader">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true">
+
+
+<link rel="canonical" href="https://q164129345.github.io/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://q164129345.github.io/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/","path":"2025/07/02/STM32F103-Bootloader程序开发01-什么是IAP？跟OTA有什么关系？/","title":"STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？ | 我的技术博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技术博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">分享编程学习心得</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-search"><a href="/search/" rel="section"><i class="fa fa-search fa-fw"></i>搜索</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <!-- 站点概览区域 - 始终显示 -->
+      <div class="site-overview-wrap" style="padding-bottom: 30px !important; margin-bottom: 35px !important;">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wallace"
+      src="/images/wallace02.jpg">
+  <p class="site-author-name" itemprop="name">Wallace</p>
+  <div class="site-description" itemprop="description">记录学习编程的点点滴滴，分享技术心得和项目经验</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+      </div>
+
+      <!-- 文章目录区域 - 有目录时显示 -->
+        <div class="post-toc-wrap" style="margin-top: 25px !important; padding-top: 25px !important;">
+          <div class="post-toc-title" style="font-size: 16px !important; color: #666 !important; text-align: center; margin-bottom: 20px !important; padding: 15px !important; background-color: #f8f8f8 !important; border-radius: 8px !important; font-weight: 600 !important; border: 1px solid #e0e0e0 !important;">文章目录</div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">导言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFIAP-In-Application-Programming-%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">什么是IAP(In-Application Programming)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFOTA-Over-The-Air%EF%BC%8C%E7%A9%BA%E4%B8%AD%E4%B8%8B%E8%BD%BD-%E5%8D%87%E7%BA%A7-%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">什么是OTA(Over-The-Air，空中下载&#x2F;升级)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IAP%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">IAP跟OTA有什么关系？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bootloader%E8%B7%9FIAP%E5%8F%88%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">Bootloader跟IAP又是什么关系？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bootloader%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">Bootloader是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%9FIAP%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">5.2.</span> <span class="nav-text">跟IAP的关系</span></a></li></ol></li></ol></div>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://q164129345.github.io/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/wallace02.jpg">
+      <meta itemprop="name" content="Wallace">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技术博客">
+      <meta itemprop="description" content="记录学习编程的点点滴滴，分享技术心得和项目经验">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？ | 我的技术博客">
+      <meta itemprop="description" content="基于STM32F103ZET6的bootloader教程系列">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-02 23:18:05" itemprop="dateCreated datePublished" datetime="2025-07-02T23:18:05+08:00">2025-07-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-07-03 00:16:53" itemprop="dateModified" datetime="2025-07-03T00:16:53+08:00">2025-07-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/STM32/" itemprop="url" rel="index"><span itemprop="name">STM32</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>828</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">基于STM32F103ZET6的bootloader教程系列</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p>这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。</p>
+<h1 id="什么是IAP-In-Application-Programming-？"><a href="#什么是IAP-In-Application-Programming-？" class="headerlink" title="什么是IAP(In-Application Programming)？"></a>什么是IAP(In-Application Programming)？</h1><p><strong>IAP，中文一般称为”应用程序内编程”或”在应用中自编程”。本质含义：MCU 在运行用户代码（App或Bootloader）时，通过自身的代码（而不是用外部编程器&#x2F;仿真器）来擦写和更新片上 Flash 内容。</strong> 典型的应用场景：在系统上线后，通过串口、CAN、USB、以太网等接口下载新固件，并写入指定Flash区，完成固件升级。</p>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true" alt="IAP示意图"></p>
+<p>实际场景：工程师用串口工具将固件下载到MCU，MCU通过IAP代码将固件烧写到App区。</p>
+<h1 id="什么是OTA-Over-The-Air，空中下载-升级-？"><a href="#什么是OTA-Over-The-Air，空中下载-升级-？" class="headerlink" title="什么是OTA(Over-The-Air，空中下载&#x2F;升级)？"></a>什么是OTA(Over-The-Air，空中下载&#x2F;升级)？</h1><p><strong>OTA，直译就是”空中下载”或者”远程升级”。本质含义：利用无线通信（如WiFi、蓝牙、NB-IoT、4G&#x2F;5G等），将新固件从服务器下载到设备，再进行固件升级。</strong> </p>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523093121.png?raw=true" alt="OTA示意图"></p>
+<p>实际场景：产品上线后，用户用手机APP或者设备自己通过WiFi下载新固件，MCU下载完成后，通过IAP流程将固件写入App区。</p>
+<h1 id="IAP跟OTA有什么关系？"><a href="#IAP跟OTA有什么关系？" class="headerlink" title="IAP跟OTA有什么关系？"></a>IAP跟OTA有什么关系？</h1><ul>
+<li>IAP 是一种升级机制&#x2F;技术，它是固件升级的基础能力，让MCU可以自我更新程序。</li>
+<li>OTA 是一种升级方式&#x2F;场景，它是一套”如何把新固件送到设备”+”触发升级流程”的完整解决方案，实现的底层依赖于IAP。</li>
+</ul>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105207.png?raw=true" alt="IAP与OTA关系图"></p>
+<p>总的来说：</p>
+<ul>
+<li>OTA &#x3D; 固件无线传输 + 本地IAP写入</li>
+<li>IAP 可以独立使用，比如通过串口&#x2F;USB升级（有线IAP）。</li>
+<li>OTA 一定要依赖IAP，否则固件即使下载下来，MCU也无法自我刷新。</li>
+</ul>
+<h1 id="Bootloader跟IAP又是什么关系？"><a href="#Bootloader跟IAP又是什么关系？" class="headerlink" title="Bootloader跟IAP又是什么关系？"></a>Bootloader跟IAP又是什么关系？</h1><h2 id="Bootloader是什么？"><a href="#Bootloader是什么？" class="headerlink" title="Bootloader是什么？"></a>Bootloader是什么？</h2><p>Bootloader（引导加载程序），是上电后第一个运行的程序，主要负责以下几个任务：</p>
+<ul>
+<li>系统初始化（最小外设&#x2F;时钟&#x2F;内存等）</li>
+<li>判断启动条件（决定启动App，还是进入升级模式）</li>
+<li>稳定地加载、校验和跳转到主应用（App）</li>
+<li>实现固件升级流程（IAP）</li>
+<li>有时还提供如参数恢复、生产测试等功能</li>
+</ul>
+<p><strong>它是设备”最后一道自救保险”。只要Bootloader没被破坏，哪怕App区彻底损坏，仍然能远程&#x2F;本地恢复设备，防止”变砖”。</strong> 在STM32系统里，Bootloader一般烧录在Flash的最前面一段区域（比如0x08000000~0x0800FFFF），具有独立的启动入口。</p>
+<h2 id="跟IAP的关系"><a href="#跟IAP的关系" class="headerlink" title="跟IAP的关系"></a>跟IAP的关系</h2><p><strong>Bootloader是IAP机制的载体，IAP功能一般是由Bootloader来实现的。</strong> 为什么不能在App上实现IAP？原因：</p>
+<ul>
+<li>安全性：Bootloader天然具备更高的安全级别，避免因App异常导致升级流程失控。</li>
+<li>健壮性：即使App区损坏，Bootloader仍可正常进入升级模式，保证设备可恢复。</li>
+<li>一致性：升级校验（如CRC、签名）由Bootloader统一处理，避免不同版本App间实现差异导致升级不兼容。</li>
+<li>启动机制：Bootloader能根据升级状态决定”升级 or 跳转App”，流程更清晰。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STM32/" rel="tag"># STM32</a>
+              <a href="/tags/bootloader/" rel="tag"># bootloader</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/29/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-angle-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/07/03/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9102-Bootloader%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84%E4%B8%8ESTM32F103%E7%9A%84Flash%E5%86%85%E5%AD%98%E8%A7%84%E5%88%92/" rel="next" title="STM32F103_Bootloader程序开发02 - Bootloader程序架构与STM32F103的Flash内存规划">
+                  STM32F103_Bootloader程序开发02 - Bootloader程序架构与STM32F103的Flash内存规划 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Wallace</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">2k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
