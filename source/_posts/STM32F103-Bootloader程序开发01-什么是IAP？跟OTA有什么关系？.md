@@ -7,6 +7,9 @@ description: 基于STM32F103ZET6的bootloader教程系列
 ---
 
 # 导言
+![硬件框架](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true)
+本教程基于正点原子战舰板开发。
+
 
 这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。
 

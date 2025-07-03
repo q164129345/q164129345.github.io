@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？</title>
+    <url>/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/</url>
+    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true" alt="硬件框架"><br>本教程基于正点原子战舰板开发。</p>
+<p>这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。</p>
+<h1 id="什么是IAP-In-Application-Programming-？"><a href="#什么是IAP-In-Application-Programming-？" class="headerlink" title="什么是IAP(In-Application Programming)？"></a>什么是IAP(In-Application Programming)？</h1><p><strong>IAP，中文一般称为”应用程序内编程”或”在应用中自编程”。本质含义：MCU 在运行用户代码（App或Bootloader）时，通过自身的代码（而不是用外部编程器&#x2F;仿真器）来擦写和更新片上 Flash 内容。</strong> 典型的应用场景：在系统上线后，通过串口、CAN、USB、以太网等接口下载新固件，并写入指定Flash区，完成固件升级。</p>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true" alt="IAP示意图"></p>
+<p>实际场景：工程师用串口工具将固件下载到MCU，MCU通过IAP代码将固件烧写到App区。</p>
+<h1 id="什么是OTA-Over-The-Air，空中下载-升级-？"><a href="#什么是OTA-Over-The-Air，空中下载-升级-？" class="headerlink" title="什么是OTA(Over-The-Air，空中下载&#x2F;升级)？"></a>什么是OTA(Over-The-Air，空中下载&#x2F;升级)？</h1><p><strong>OTA，直译就是”空中下载”或者”远程升级”。本质含义：利用无线通信（如WiFi、蓝牙、NB-IoT、4G&#x2F;5G等），将新固件从服务器下载到设备，再进行固件升级。</strong> </p>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523093121.png?raw=true" alt="OTA示意图"></p>
+<p>实际场景：产品上线后，用户用手机APP或者设备自己通过WiFi下载新固件，MCU下载完成后，通过IAP流程将固件写入App区。</p>
+<h1 id="IAP跟OTA有什么关系？"><a href="#IAP跟OTA有什么关系？" class="headerlink" title="IAP跟OTA有什么关系？"></a>IAP跟OTA有什么关系？</h1><ul>
+<li>IAP 是一种升级机制&#x2F;技术，它是固件升级的基础能力，让MCU可以自我更新程序。</li>
+<li>OTA 是一种升级方式&#x2F;场景，它是一套”如何把新固件送到设备”+”触发升级流程”的完整解决方案，实现的底层依赖于IAP。</li>
+</ul>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105207.png?raw=true" alt="IAP与OTA关系图"></p>
+<p>总的来说：</p>
+<ul>
+<li>OTA &#x3D; 固件无线传输 + 本地IAP写入</li>
+<li>IAP 可以独立使用，比如通过串口&#x2F;USB升级（有线IAP）。</li>
+<li>OTA 一定要依赖IAP，否则固件即使下载下来，MCU也无法自我刷新。</li>
+</ul>
+<h1 id="Bootloader跟IAP又是什么关系？"><a href="#Bootloader跟IAP又是什么关系？" class="headerlink" title="Bootloader跟IAP又是什么关系？"></a>Bootloader跟IAP又是什么关系？</h1><h2 id="Bootloader是什么？"><a href="#Bootloader是什么？" class="headerlink" title="Bootloader是什么？"></a>Bootloader是什么？</h2><p>Bootloader（引导加载程序），是上电后第一个运行的程序，主要负责以下几个任务：</p>
+<ul>
+<li>系统初始化（最小外设&#x2F;时钟&#x2F;内存等）</li>
+<li>判断启动条件（决定启动App，还是进入升级模式）</li>
+<li>稳定地加载、校验和跳转到主应用（App）</li>
+<li>实现固件升级流程（IAP）</li>
+<li>有时还提供如参数恢复、生产测试等功能</li>
+</ul>
+<p><strong>它是设备”最后一道自救保险”。只要Bootloader没被破坏，哪怕App区彻底损坏，仍然能远程&#x2F;本地恢复设备，防止”变砖”。</strong> 在STM32系统里，Bootloader一般烧录在Flash的最前面一段区域（比如0x08000000~0x0800FFFF），具有独立的启动入口。</p>
+<h2 id="跟IAP的关系"><a href="#跟IAP的关系" class="headerlink" title="跟IAP的关系"></a>跟IAP的关系</h2><p><strong>Bootloader是IAP机制的载体，IAP功能一般是由Bootloader来实现的。</strong> 为什么不能在App上实现IAP？原因：</p>
+<ul>
+<li>安全性：Bootloader天然具备更高的安全级别，避免因App异常导致升级流程失控。</li>
+<li>健壮性：即使App区损坏，Bootloader仍可正常进入升级模式，保证设备可恢复。</li>
+<li>一致性：升级校验（如CRC、签名）由Bootloader统一处理，避免不同版本App间实现差异导致升级不兼容。</li>
+<li>启动机制：Bootloader能根据升级状态决定”升级 or 跳转App”，流程更清晰。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>STM32</category>
+      </categories>
+      <tags>
+        <tag>STM32</tag>
+        <tag>bootloader</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>STM32F103_Bootloader程序开发02 - Bootloader程序架构与STM32F103的Flash内存规划</title>
     <url>/2025/07/03/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9102-Bootloader%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84%E4%B8%8ESTM32F103%E7%9A%84Flash%E5%86%85%E5%AD%98%E8%A7%84%E5%88%92/</url>
-    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250531202718.png?raw=true" alt="Bootloader程序架构图"><br>在工业设备和机器人项目中，固件远程升级能力已成为提升设备维护性与生命周期的关键手段。本文将围绕STM32平台，系统性介绍一个简洁、可靠的Bootloader程序设计思路。<br>我们将Bootloader核心流程划分为六大功能模块：</p>
+    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true" alt="硬件框架"><br>本教程基于正点原子战舰板开发。</p>
+<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250531202718.png?raw=true" alt="Bootloader程序架构图"><br>在工业设备和机器人项目中，固件远程升级能力已成为提升设备维护性与生命周期的关键手段。本文将围绕STM32平台，系统性介绍一个简洁、可靠的Bootloader程序设计思路。<br>我们将Bootloader核心流程划分为六大功能模块：</p>
 <ol>
 <li>启动入口与升级模式判断</li>
 <li>通讯协议与指令解析</li>
@@ -67,6 +115,24 @@
         <tag>STM32</tag>
         <tag>bootloader</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2025/06/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>欢迎来到我的技术博客</title>
@@ -135,70 +201,6 @@
         <tag>博客</tag>
         <tag>介绍</tag>
         <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2025/06/29/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>STM32F103_Bootloader程序开发01 - 什么是IAP？跟OTA有什么关系？</title>
-    <url>/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/</url>
-    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p>这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。</p>
-<h1 id="什么是IAP-In-Application-Programming-？"><a href="#什么是IAP-In-Application-Programming-？" class="headerlink" title="什么是IAP(In-Application Programming)？"></a>什么是IAP(In-Application Programming)？</h1><p><strong>IAP，中文一般称为”应用程序内编程”或”在应用中自编程”。本质含义：MCU 在运行用户代码（App或Bootloader）时，通过自身的代码（而不是用外部编程器&#x2F;仿真器）来擦写和更新片上 Flash 内容。</strong> 典型的应用场景：在系统上线后，通过串口、CAN、USB、以太网等接口下载新固件，并写入指定Flash区，完成固件升级。</p>
-<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true" alt="IAP示意图"></p>
-<p>实际场景：工程师用串口工具将固件下载到MCU，MCU通过IAP代码将固件烧写到App区。</p>
-<h1 id="什么是OTA-Over-The-Air，空中下载-升级-？"><a href="#什么是OTA-Over-The-Air，空中下载-升级-？" class="headerlink" title="什么是OTA(Over-The-Air，空中下载&#x2F;升级)？"></a>什么是OTA(Over-The-Air，空中下载&#x2F;升级)？</h1><p><strong>OTA，直译就是”空中下载”或者”远程升级”。本质含义：利用无线通信（如WiFi、蓝牙、NB-IoT、4G&#x2F;5G等），将新固件从服务器下载到设备，再进行固件升级。</strong> </p>
-<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523093121.png?raw=true" alt="OTA示意图"></p>
-<p>实际场景：产品上线后，用户用手机APP或者设备自己通过WiFi下载新固件，MCU下载完成后，通过IAP流程将固件写入App区。</p>
-<h1 id="IAP跟OTA有什么关系？"><a href="#IAP跟OTA有什么关系？" class="headerlink" title="IAP跟OTA有什么关系？"></a>IAP跟OTA有什么关系？</h1><ul>
-<li>IAP 是一种升级机制&#x2F;技术，它是固件升级的基础能力，让MCU可以自我更新程序。</li>
-<li>OTA 是一种升级方式&#x2F;场景，它是一套”如何把新固件送到设备”+”触发升级流程”的完整解决方案，实现的底层依赖于IAP。</li>
-</ul>
-<p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105207.png?raw=true" alt="IAP与OTA关系图"></p>
-<p>总的来说：</p>
-<ul>
-<li>OTA &#x3D; 固件无线传输 + 本地IAP写入</li>
-<li>IAP 可以独立使用，比如通过串口&#x2F;USB升级（有线IAP）。</li>
-<li>OTA 一定要依赖IAP，否则固件即使下载下来，MCU也无法自我刷新。</li>
-</ul>
-<h1 id="Bootloader跟IAP又是什么关系？"><a href="#Bootloader跟IAP又是什么关系？" class="headerlink" title="Bootloader跟IAP又是什么关系？"></a>Bootloader跟IAP又是什么关系？</h1><h2 id="Bootloader是什么？"><a href="#Bootloader是什么？" class="headerlink" title="Bootloader是什么？"></a>Bootloader是什么？</h2><p>Bootloader（引导加载程序），是上电后第一个运行的程序，主要负责以下几个任务：</p>
-<ul>
-<li>系统初始化（最小外设&#x2F;时钟&#x2F;内存等）</li>
-<li>判断启动条件（决定启动App，还是进入升级模式）</li>
-<li>稳定地加载、校验和跳转到主应用（App）</li>
-<li>实现固件升级流程（IAP）</li>
-<li>有时还提供如参数恢复、生产测试等功能</li>
-</ul>
-<p><strong>它是设备”最后一道自救保险”。只要Bootloader没被破坏，哪怕App区彻底损坏，仍然能远程&#x2F;本地恢复设备，防止”变砖”。</strong> 在STM32系统里，Bootloader一般烧录在Flash的最前面一段区域（比如0x08000000~0x0800FFFF），具有独立的启动入口。</p>
-<h2 id="跟IAP的关系"><a href="#跟IAP的关系" class="headerlink" title="跟IAP的关系"></a>跟IAP的关系</h2><p><strong>Bootloader是IAP机制的载体，IAP功能一般是由Bootloader来实现的。</strong> 为什么不能在App上实现IAP？原因：</p>
-<ul>
-<li>安全性：Bootloader天然具备更高的安全级别，避免因App异常导致升级流程失控。</li>
-<li>健壮性：即使App区损坏，Bootloader仍可正常进入升级模式，保证设备可恢复。</li>
-<li>一致性：升级校验（如CRC、签名）由Bootloader统一处理，避免不同版本App间实现差异导致升级不兼容。</li>
-<li>启动机制：Bootloader能根据升级状态决定”升级 or 跳转App”，流程更清晰。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>STM32</category>
-      </categories>
-      <tags>
-        <tag>STM32</tag>
-        <tag>bootloader</tag>
       </tags>
   </entry>
 </search>

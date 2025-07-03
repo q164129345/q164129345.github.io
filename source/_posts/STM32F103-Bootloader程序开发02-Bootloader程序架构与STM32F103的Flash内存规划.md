@@ -7,6 +7,8 @@ description: 基于STM32F103ZET6的bootloader教程系列
 ---
 
 # 导言
+![硬件框架](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true)
+本教程基于正点原子战舰板开发。
 
 ![Bootloader程序架构图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250531202718.png?raw=true)
 在工业设备和机器人项目中，固件远程升级能力已成为提升设备维护性与生命周期的关键手段。本文将围绕STM32平台，系统性介绍一个简洁、可靠的Bootloader程序设计思路。

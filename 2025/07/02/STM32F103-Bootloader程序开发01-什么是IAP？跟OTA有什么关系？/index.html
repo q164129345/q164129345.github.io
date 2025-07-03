@@ -26,16 +26,17 @@
 <meta property="og:site_name" content="我的技术博客">
 <meta property="og:description" content="基于STM32F103ZET6的bootloader教程系列">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true">
 <meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true">
 <meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523093121.png?raw=true">
 <meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105207.png?raw=true">
 <meta property="article:published_time" content="2025-07-02T15:18:05.000Z">
-<meta property="article:modified_time" content="2025-07-02T16:16:53.176Z">
+<meta property="article:modified_time" content="2025-07-03T15:10:22.677Z">
 <meta property="article:author" content="Wallace">
 <meta property="article:tag" content="STM32">
 <meta property="article:tag" content="bootloader">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true">
+<meta name="twitter:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true">
 
 
 <link rel="canonical" href="https://q164129345.github.io/2025/07/02/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9101-%E4%BB%80%E4%B9%88%E6%98%AFIAP%EF%BC%9F%E8%B7%9FOTA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F/">
@@ -213,7 +214,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-07-03 00:16:53" itemprop="dateModified" datetime="2025-07-03T00:16:53+08:00">2025-07-03</time>
+      <time title="修改时间：2025-07-03 23:10:22" itemprop="dateModified" datetime="2025-07-03T23:10:22+08:00">2025-07-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -232,7 +233,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>828</span>
+      <span>846</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -250,7 +251,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p>这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true" alt="硬件框架"><br>本教程基于正点原子战舰板开发。</p>
+<p>这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。</p>
 <h1 id="什么是IAP-In-Application-Programming-？"><a href="#什么是IAP-In-Application-Programming-？" class="headerlink" title="什么是IAP(In-Application Programming)？"></a>什么是IAP(In-Application Programming)？</h1><p><strong>IAP，中文一般称为”应用程序内编程”或”在应用中自编程”。本质含义：MCU 在运行用户代码（App或Bootloader）时，通过自身的代码（而不是用外部编程器&#x2F;仿真器）来擦写和更新片上 Flash 内容。</strong> 典型的应用场景：在系统上线后，通过串口、CAN、USB、以太网等接口下载新固件，并写入指定Flash区，完成固件升级。</p>
 <p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true" alt="IAP示意图"></p>
 <p>实际场景：工程师用串口工具将固件下载到MCU，MCU通过IAP代码将固件烧写到App区。</p>
@@ -345,7 +347,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8 分钟</span>
+    <span title="站点阅读时长">9 分钟</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
