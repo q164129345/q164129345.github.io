@@ -157,47 +157,6 @@
       </tags>
   </entry>
   <entry>
-    <title>STM32F103_Bootloader程序开发05 - Keil修改生成文件的路径与文件名，自动生成bin格式文件</title>
-    <url>/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9105-Keil%E4%BF%AE%E6%94%B9%E7%94%9F%E6%88%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90bin%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png" alt="STM32F103启动流程图"><br>本教程使用正点原子战舰板开发。</p>
-<p>通过Keil的相关配置，可以灵活地修改输出文件的保存路径及文件名称。在Bootloader程序开发过程中，合理配置输出文件对于后续固件升级和自动化脚本处理至关重要。完成路径和文件名配置后，还可以借助Keil自带的fromelf.exe工具，将生成的axf文件转换为bin格式文件，便于后续烧录和升级操作。</p>
-<h1 id="修改生成文件的路径"><a href="#修改生成文件的路径" class="headerlink" title="修改生成文件的路径"></a>修改生成文件的路径</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164207.png" alt="创建Outputs文件夹"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164251.png" alt="Outputs文件夹位置"><br>如上所示，在MDK-ARM文件夹里创建Ouputs文件夹，这个文件夹用于存放Keil自动生成的文件。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164607.png" alt="Keil项目设置"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164819.png" alt="输出路径设置1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164904.png" alt="输出路径设置2"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165002.png" alt="输出路径设置3"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165058.png" alt="输出路径设置4"></p>
-<h1 id="修改生成的文件名"><a href="#修改生成的文件名" class="headerlink" title="修改生成的文件名"></a>修改生成的文件名</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165215.png" alt="文件名设置入口"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165429.png" alt="文件名设置界面"></p>
-<h1 id="让Keil调用fromelf-exe生成升级用的bin文件"><a href="#让Keil调用fromelf-exe生成升级用的bin文件" class="headerlink" title="让Keil调用fromelf.exe生成升级用的bin文件"></a>让Keil调用fromelf.exe生成升级用的bin文件</h1><h2 id="什么是fromelf-exe？"><a href="#什么是fromelf-exe？" class="headerlink" title="什么是fromelf.exe？"></a>什么是fromelf.exe？</h2><p>这是 ARM Keil 自带的一个命令行工具，用于将编译生成的目标文件（axf&#x2F;elf格式）转换为其他格式（比如 bin、hex）。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170718.png" alt="fromelf工具说明"></p>
-<h2 id="生成App-bin"><a href="#生成App-bin" class="headerlink" title="生成App.bin"></a>生成App.bin</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170853.png" alt="配置fromelf命令1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528171042.png" alt="配置fromelf命令2"></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin --output .\Output\App.bin .\Outputs\App.axf</span><br></pre></td></tr></table></figure>
-<p>意思是：</p>
-<ol>
-<li>C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe<ul>
-<li>这是 ARM Keil 自带的一个命令行工具，用于将编译生成的目标文件（axf&#x2F;elf格式）转换为其他格式（比如 bin、hex）。</li>
-</ul>
-</li>
-<li>–bin<ul>
-<li>这是 fromelf 的参数，意思是将输入的 axf 文件（即你的可执行文件）转换成二进制（.bin）格式。</li>
-<li>这种 bin 格式是裸数据，没有任何调试信息，适合直接烧录进 MCU Flash，用于 bootloader、IAP、量产等场景。</li>
-</ul>
-</li>
-<li>–output .\Output\App.bin<ul>
-<li>–output 是 fromelf 工具的参数，用来指定输出文件名和路径。</li>
-<li>.\Output\App.bin 是在当前工程目录下的Output文件夹下生成App.bin二进制文件。</li>
-</ul>
-</li>
-<li>.\Outputs\App.axf<ul>
-<li>指定输入的 axf 文件，它在工程目录下的Outputs文件夹下，名字是App.axf。</li>
-</ul>
-</li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528172042.png" alt="生成的App.bin文件"><br>如上所示，得到了我们IAP升级需要的App程序的二进制文件App.bin了。</p>
-]]></content>
-      <categories>
-        <category>STM32</category>
-      </categories>
-      <tags>
-        <tag>STM32</tag>
-        <tag>bootloader</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>STM32F103_Bootloader程序开发04 - App跳转模块(app_jump.c与app_jump.h)</title>
     <url>/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9104-App%E8%B7%B3%E8%BD%AC%E6%A8%A1%E5%9D%97-app-jump-c%E4%B8%8Eapp-jump-h/</url>
     <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png" alt="STM32F103启动流程图"><br>本教程使用正点原子战舰板开发。</p>
@@ -240,6 +199,84 @@
 </blockquote>
 <h2 id="App程序为什么要重新设置一遍SCB-VTOR"><a href="#App程序为什么要重新设置一遍SCB-VTOR" class="headerlink" title="App程序为什么要重新设置一遍SCB-&gt;VTOR?"></a>App程序为什么要重新设置一遍SCB-&gt;VTOR?</h2><p><code>App初始化又把VTOR&quot;改回去了&quot;</code> 。App的启动代码（如startup_stm32f1xx.s）在执行时，很多IDE&#x2F;库&#x2F;工具链生成的启动代码默认会重新设置SCB-&gt;VTOR为0x08000000，即”复位地址”。所以，App程序必须手动再设置一遍中断向量表。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528144703.png" alt="VTOR设置说明"></p>
 <h2 id="App程序为什么要打开全局中断-enable-irq"><a href="#App程序为什么要打开全局中断-enable-irq" class="headerlink" title="App程序为什么要打开全局中断__enable_irq()?"></a>App程序为什么要打开全局中断__enable_irq()?</h2><p><code>bootloader程序在跳转App之前关闭了全局中断__disable_irq()。</code>App初始化不会自动打开全局中断。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528144911.png" alt="全局中断设置说明"></p>
+]]></content>
+      <categories>
+        <category>STM32</category>
+      </categories>
+      <tags>
+        <tag>STM32</tag>
+        <tag>bootloader</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STM32F103_Bootloader程序开发06 - IAP升级用的App.bin增加CRC32校验码，确保固件完整性，防止&#39;变砖&#39;</title>
+    <url>/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9106-IAP%E5%8D%87%E7%BA%A7%E7%94%A8%E7%9A%84App-bin%E5%A2%9E%E5%8A%A0CRC32%E6%A0%A1%E9%AA%8C%E7%A0%81%EF%BC%8C%E7%A1%AE%E4%BF%9D%E5%9B%BA%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%EF%BC%8C%E9%98%B2%E6%AD%A2&#39;%E5%8F%98%E7%A0%96&#39;/</url>
+    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><hr>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png" alt="STM32开发板"><br>本教程使用正点原子战舰板开发。</p>
+<p>[[STM32F103_Bootloader程序开发05 - Keil修改生成文件的路径与文件名，自动生成bin格式文件]]上一章节成功让Keil生成App.bin二进制文件，用于IAP升级。</p>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250706093821.png" alt="CRC32校验示意图"><br><code>为了保障IAP升级过程中的固件完整性，避免因损坏文件导致设备&quot;变砖&quot;，为App.bin添加CRC32校验码是一项关键措施。</code>在实际产品中，IAP（在应用程序中编程）升级机制极大地提升了设备远程维护与功能迭代的效率。然而，一旦升级过程中出现传输异常、存储错误或数据被篡改，App.bin中的固件内容若无有效校验机制，将可能导致”程序跳转失败”或”设备变砖”的严重问题。为避免此类风险，我们在本篇中将介绍如何在生成的App.bin文件末尾添加一个CRC32校验码，并在Bootloader中进行验证。通过这一机制，系统能在启动前准确判断固件的完整性，拒绝加载损坏固件，从而提升系统的可靠性与安全性。</p>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250530092955.png" alt="App.bin与App_crc.bin对比"><br><code>总的来说，本章节的目的是在App.bin的结尾增加4个字节的CRC32，OTA（IAP）升级的时候使用App_crc.bin。注意不要使用App.bin。</code></p>
+<p>项目地址：<br>github: <a href="https://github.com/q164129345/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file">https://github.com/q164129345/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file</a><br>gitee(国内): <a href="https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file">https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file</a></p>
+<br>
+
+<h1 id="让Keil编译完代码后，自动生成App-crc-bin"><a href="#让Keil编译完代码后，自动生成App-crc-bin" class="headerlink" title="让Keil编译完代码后，自动生成App_crc.bin"></a>让Keil编译完代码后，自动生成App_crc.bin</h1><hr>
+<h2 id="准备工具"><a href="#准备工具" class="headerlink" title="准备工具"></a>准备工具</h2><ol>
+<li>srec_cat.exe（也可以去官网下载）</li>
+<li>crc_add.bat(我已经编写好了，拿来用就好)<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529114543.png" alt="工具文件"><br>如上所示，这两个工具已经在App的MDK-ARM文件夹里，自行领取即可。</li>
+</ol>
+<h2 id="让Keil编译完之后，自动调用crc-add-bat脚本，生成App-crc-bin文件"><a href="#让Keil编译完之后，自动调用crc-add-bat脚本，生成App-crc-bin文件" class="headerlink" title="让Keil编译完之后，自动调用crc_add.bat脚本，生成App_crc.bin文件"></a>让Keil编译完之后，自动调用crc_add.bat脚本，生成App_crc.bin文件</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529120215.png" alt="Keil编译配置"></p>
+<h2 id="编译一次，看看效果"><a href="#编译一次，看看效果" class="headerlink" title="编译一次，看看效果"></a>编译一次，看看效果</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/After%20Build.gif" alt="编译后生成文件"><br>如上所示，编译完成之后，顺利生成两个bin文件。</p>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529134116.png" alt="生成的bin文件"><br>如上所示：</p>
+<ol>
+<li>Run #1 的指令用于生成App.bin。</li>
+<li>Run #2 的指令（其实就是调用crc_add.bat）用于生成App_crc.bin。</li>
+</ol>
+<br>
+
+<h1 id="对比App-bin与App-crc-bin"><a href="#对比App-bin与App-crc-bin" class="headerlink" title="对比App.bin与App_crc.bin"></a>对比App.bin与App_crc.bin</h1><hr>
+<h2 id="对比文件结尾"><a href="#对比文件结尾" class="headerlink" title="对比文件结尾"></a>对比文件结尾</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529134502.png" alt="文件对比"><br>如上所示，左边是App_crc.bin文件，右边是App.bin文件。可见，App_crc.bin文件比App.bin文件在尾部多了一个CRC32校验码。<br>在下一章节，将编写一个代码，计算App_crc.bin的整包的CRC32码（当然，最后四个字节除外），用STM32计算出来的CRC32码跟文件最后的CRC32码做对比。如果它们相同，即整个固件的完整性是没有问题的。如果它们不相同，那整个固件的完整性有问题，IAP升级失败。等待上位机的下一次OTA升级。</p>
+<h2 id="对比文件内容（App-crc-bin的最后4个字节除外）"><a href="#对比文件内容（App-crc-bin的最后4个字节除外）" class="headerlink" title="对比文件内容（App_crc.bin的最后4个字节除外）"></a>对比文件内容（App_crc.bin的最后4个字节除外）</h2><p>crc_add.bat脚本有没有将改动固件的内容呢？让ChatGPT帮我检查一下。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135519.png" alt="ChatGPT检查结果1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135610.png" alt="ChatGPT检查结果2"> </p>
+]]></content>
+      <categories>
+        <category>STM32</category>
+      </categories>
+      <tags>
+        <tag>STM32</tag>
+        <tag>bootloader</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STM32F103_Bootloader程序开发05 - Keil修改生成文件的路径与文件名，自动生成bin格式文件</title>
+    <url>/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9105-Keil%E4%BF%AE%E6%94%B9%E7%94%9F%E6%88%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90bin%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png" alt="STM32F103启动流程图"><br>本教程使用正点原子战舰板开发。</p>
+<p>通过Keil的相关配置，可以灵活地修改输出文件的保存路径及文件名称。在Bootloader程序开发过程中，合理配置输出文件对于后续固件升级和自动化脚本处理至关重要。完成路径和文件名配置后，还可以借助Keil自带的fromelf.exe工具，将生成的axf文件转换为bin格式文件，便于后续烧录和升级操作。</p>
+<h1 id="修改生成文件的路径"><a href="#修改生成文件的路径" class="headerlink" title="修改生成文件的路径"></a>修改生成文件的路径</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164207.png" alt="创建Outputs文件夹"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164251.png" alt="Outputs文件夹位置"><br>如上所示，在MDK-ARM文件夹里创建Ouputs文件夹，这个文件夹用于存放Keil自动生成的文件。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164607.png" alt="Keil项目设置"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164819.png" alt="输出路径设置1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164904.png" alt="输出路径设置2"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165002.png" alt="输出路径设置3"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165058.png" alt="输出路径设置4"></p>
+<h1 id="修改生成的文件名"><a href="#修改生成的文件名" class="headerlink" title="修改生成的文件名"></a>修改生成的文件名</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165215.png" alt="文件名设置入口"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165429.png" alt="文件名设置界面"></p>
+<h1 id="让Keil调用fromelf-exe生成升级用的bin文件"><a href="#让Keil调用fromelf-exe生成升级用的bin文件" class="headerlink" title="让Keil调用fromelf.exe生成升级用的bin文件"></a>让Keil调用fromelf.exe生成升级用的bin文件</h1><h2 id="什么是fromelf-exe？"><a href="#什么是fromelf-exe？" class="headerlink" title="什么是fromelf.exe？"></a>什么是fromelf.exe？</h2><p>这是 ARM Keil 自带的一个命令行工具，用于将编译生成的目标文件（axf&#x2F;elf格式）转换为其他格式（比如 bin、hex）。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170718.png" alt="fromelf工具说明"></p>
+<h2 id="生成App-bin"><a href="#生成App-bin" class="headerlink" title="生成App.bin"></a>生成App.bin</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170853.png" alt="配置fromelf命令1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528171042.png" alt="配置fromelf命令2"></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin --output .\Output\App.bin .\Outputs\App.axf</span><br></pre></td></tr></table></figure>
+<p>意思是：</p>
+<ol>
+<li>C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe<ul>
+<li>这是 ARM Keil 自带的一个命令行工具，用于将编译生成的目标文件（axf&#x2F;elf格式）转换为其他格式（比如 bin、hex）。</li>
+</ul>
+</li>
+<li>–bin<ul>
+<li>这是 fromelf 的参数，意思是将输入的 axf 文件（即你的可执行文件）转换成二进制（.bin）格式。</li>
+<li>这种 bin 格式是裸数据，没有任何调试信息，适合直接烧录进 MCU Flash，用于 bootloader、IAP、量产等场景。</li>
+</ul>
+</li>
+<li>–output .\Output\App.bin<ul>
+<li>–output 是 fromelf 工具的参数，用来指定输出文件名和路径。</li>
+<li>.\Output\App.bin 是在当前工程目录下的Output文件夹下生成App.bin二进制文件。</li>
+</ul>
+</li>
+<li>.\Outputs\App.axf<ul>
+<li>指定输入的 axf 文件，它在工程目录下的Outputs文件夹下，名字是App.axf。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528172042.png" alt="生成的App.bin文件"><br>如上所示，得到了我们IAP升级需要的App程序的二进制文件App.bin了。</p>
 ]]></content>
       <categories>
         <category>STM32</category>

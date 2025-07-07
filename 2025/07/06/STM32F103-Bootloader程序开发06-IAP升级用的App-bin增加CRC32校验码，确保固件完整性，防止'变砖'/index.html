@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"q164129345.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.23.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="基于STM32F103ZET6的bootloader教程系列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32F103_Bootloader程序开发06 - IAP升级用的App.bin增加CRC32校验码，确保固件完整性，防止&#39;变砖&#39;">
+<meta property="og:url" content="https://q164129345.github.io/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9106-IAP%E5%8D%87%E7%BA%A7%E7%94%A8%E7%9A%84App-bin%E5%A2%9E%E5%8A%A0CRC32%E6%A0%A1%E9%AA%8C%E7%A0%81%EF%BC%8C%E7%A1%AE%E4%BF%9D%E5%9B%BA%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%EF%BC%8C%E9%98%B2%E6%AD%A2'%E5%8F%98%E7%A0%96'/index.html">
+<meta property="og:site_name" content="我的技术博客">
+<meta property="og:description" content="基于STM32F103ZET6的bootloader教程系列">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250706093821.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250530092955.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529114543.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529120215.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/After%20Build.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529134116.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529134502.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135519.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135610.png">
+<meta property="article:published_time" content="2025-07-06T03:13:00.000Z">
+<meta property="article:modified_time" content="2025-07-07T23:31:08.648Z">
+<meta property="article:author" content="Wallace">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="bootloader">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png">
+
+
+<link rel="canonical" href="https://q164129345.github.io/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9106-IAP%E5%8D%87%E7%BA%A7%E7%94%A8%E7%9A%84App-bin%E5%A2%9E%E5%8A%A0CRC32%E6%A0%A1%E9%AA%8C%E7%A0%81%EF%BC%8C%E7%A1%AE%E4%BF%9D%E5%9B%BA%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%EF%BC%8C%E9%98%B2%E6%AD%A2'%E5%8F%98%E7%A0%96'/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://q164129345.github.io/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9106-IAP%E5%8D%87%E7%BA%A7%E7%94%A8%E7%9A%84App-bin%E5%A2%9E%E5%8A%A0CRC32%E6%A0%A1%E9%AA%8C%E7%A0%81%EF%BC%8C%E7%A1%AE%E4%BF%9D%E5%9B%BA%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%EF%BC%8C%E9%98%B2%E6%AD%A2'%E5%8F%98%E7%A0%96'/","path":"2025/07/06/STM32F103-Bootloader程序开发06-IAP升级用的App-bin增加CRC32校验码，确保固件完整性，防止'变砖'/","title":"STM32F103_Bootloader程序开发06 - IAP升级用的App.bin增加CRC32校验码，确保固件完整性，防止'变砖'"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>STM32F103_Bootloader程序开发06 - IAP升级用的App.bin增加CRC32校验码，确保固件完整性，防止'变砖' | 我的技术博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技术博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">分享编程学习心得</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-search"><a href="/search/" rel="section"><i class="fa fa-search fa-fw"></i>搜索</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <!-- 站点概览区域 - 始终显示 -->
+      <div class="site-overview-wrap" style="padding-bottom: 30px !important; margin-bottom: 35px !important;">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wallace"
+      src="/images/wallace02.jpg">
+  <p class="site-author-name" itemprop="name">Wallace</p>
+  <div class="site-description" itemprop="description">记录学习编程的点点滴滴，分享技术心得和项目经验</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+      </div>
+
+      <!-- 文章目录区域 - 有目录时显示 -->
+        <div class="post-toc-wrap" style="margin-top: 25px !important; padding-top: 25px !important;">
+          <div class="post-toc-title" style="font-size: 16px !important; color: #666 !important; text-align: center; margin-bottom: 20px !important; padding: 15px !important; background-color: #f8f8f8 !important; border-radius: 8px !important; font-weight: 600 !important; border: 1px solid #e0e0e0 !important;">文章目录</div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">导言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A9Keil%E7%BC%96%E8%AF%91%E5%AE%8C%E4%BB%A3%E7%A0%81%E5%90%8E%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90App-crc-bin"><span class="nav-number">2.</span> <span class="nav-text">让Keil编译完代码后，自动生成App_crc.bin</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E5%85%B7"><span class="nav-number">2.1.</span> <span class="nav-text">准备工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A9Keil%E7%BC%96%E8%AF%91%E5%AE%8C%E4%B9%8B%E5%90%8E%EF%BC%8C%E8%87%AA%E5%8A%A8%E8%B0%83%E7%94%A8crc-add-bat%E8%84%9A%E6%9C%AC%EF%BC%8C%E7%94%9F%E6%88%90App-crc-bin%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">让Keil编译完之后，自动调用crc_add.bat脚本，生成App_crc.bin文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E4%B8%80%E6%AC%A1%EF%BC%8C%E7%9C%8B%E7%9C%8B%E6%95%88%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">编译一次，看看效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94App-bin%E4%B8%8EApp-crc-bin"><span class="nav-number">3.</span> <span class="nav-text">对比App.bin与App_crc.bin</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E6%96%87%E4%BB%B6%E7%BB%93%E5%B0%BE"><span class="nav-number">3.1.</span> <span class="nav-text">对比文件结尾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%EF%BC%88App-crc-bin%E7%9A%84%E6%9C%80%E5%90%8E4%E4%B8%AA%E5%AD%97%E8%8A%82%E9%99%A4%E5%A4%96%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">对比文件内容（App_crc.bin的最后4个字节除外）</span></a></li></ol></li></ol></div>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://q164129345.github.io/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9106-IAP%E5%8D%87%E7%BA%A7%E7%94%A8%E7%9A%84App-bin%E5%A2%9E%E5%8A%A0CRC32%E6%A0%A1%E9%AA%8C%E7%A0%81%EF%BC%8C%E7%A1%AE%E4%BF%9D%E5%9B%BA%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%EF%BC%8C%E9%98%B2%E6%AD%A2'%E5%8F%98%E7%A0%96'/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/wallace02.jpg">
+      <meta itemprop="name" content="Wallace">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技术博客">
+      <meta itemprop="description" content="记录学习编程的点点滴滴，分享技术心得和项目经验">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="STM32F103_Bootloader程序开发06 - IAP升级用的App.bin增加CRC32校验码，确保固件完整性，防止&#39;变砖&#39; | 我的技术博客">
+      <meta itemprop="description" content="基于STM32F103ZET6的bootloader教程系列">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STM32F103_Bootloader程序开发06 - IAP升级用的App.bin增加CRC32校验码，确保固件完整性，防止'变砖'
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-06 11:13:00" itemprop="dateCreated datePublished" datetime="2025-07-06T11:13:00+08:00">2025-07-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-07-08 07:31:08" itemprop="dateModified" datetime="2025-07-08T07:31:08+08:00">2025-07-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/STM32/" itemprop="url" rel="index"><span itemprop="name">STM32</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>756</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">基于STM32F103ZET6的bootloader教程系列</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><hr>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png" alt="STM32开发板"><br>本教程使用正点原子战舰板开发。</p>
+<p>[[STM32F103_Bootloader程序开发05 - Keil修改生成文件的路径与文件名，自动生成bin格式文件]]上一章节成功让Keil生成App.bin二进制文件，用于IAP升级。</p>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250706093821.png" alt="CRC32校验示意图"><br><code>为了保障IAP升级过程中的固件完整性，避免因损坏文件导致设备&quot;变砖&quot;，为App.bin添加CRC32校验码是一项关键措施。</code>在实际产品中，IAP（在应用程序中编程）升级机制极大地提升了设备远程维护与功能迭代的效率。然而，一旦升级过程中出现传输异常、存储错误或数据被篡改，App.bin中的固件内容若无有效校验机制，将可能导致”程序跳转失败”或”设备变砖”的严重问题。为避免此类风险，我们在本篇中将介绍如何在生成的App.bin文件末尾添加一个CRC32校验码，并在Bootloader中进行验证。通过这一机制，系统能在启动前准确判断固件的完整性，拒绝加载损坏固件，从而提升系统的可靠性与安全性。</p>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250530092955.png" alt="App.bin与App_crc.bin对比"><br><code>总的来说，本章节的目的是在App.bin的结尾增加4个字节的CRC32，OTA（IAP）升级的时候使用App_crc.bin。注意不要使用App.bin。</code></p>
+<p>项目地址：<br>github: <a target="_blank" rel="noopener" href="https://github.com/q164129345/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file">https://github.com/q164129345/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file</a><br>gitee(国内): <a target="_blank" rel="noopener" href="https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file">https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader06_stm32f103_compile_bin_iap_file</a></p>
+<br>
+
+<h1 id="让Keil编译完代码后，自动生成App-crc-bin"><a href="#让Keil编译完代码后，自动生成App-crc-bin" class="headerlink" title="让Keil编译完代码后，自动生成App_crc.bin"></a>让Keil编译完代码后，自动生成App_crc.bin</h1><hr>
+<h2 id="准备工具"><a href="#准备工具" class="headerlink" title="准备工具"></a>准备工具</h2><ol>
+<li>srec_cat.exe（也可以去官网下载）</li>
+<li>crc_add.bat(我已经编写好了，拿来用就好)<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529114543.png" alt="工具文件"><br>如上所示，这两个工具已经在App的MDK-ARM文件夹里，自行领取即可。</li>
+</ol>
+<h2 id="让Keil编译完之后，自动调用crc-add-bat脚本，生成App-crc-bin文件"><a href="#让Keil编译完之后，自动调用crc-add-bat脚本，生成App-crc-bin文件" class="headerlink" title="让Keil编译完之后，自动调用crc_add.bat脚本，生成App_crc.bin文件"></a>让Keil编译完之后，自动调用crc_add.bat脚本，生成App_crc.bin文件</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529120215.png" alt="Keil编译配置"></p>
+<h2 id="编译一次，看看效果"><a href="#编译一次，看看效果" class="headerlink" title="编译一次，看看效果"></a>编译一次，看看效果</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/After%20Build.gif" alt="编译后生成文件"><br>如上所示，编译完成之后，顺利生成两个bin文件。</p>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529134116.png" alt="生成的bin文件"><br>如上所示：</p>
+<ol>
+<li>Run #1 的指令用于生成App.bin。</li>
+<li>Run #2 的指令（其实就是调用crc_add.bat）用于生成App_crc.bin。</li>
+</ol>
+<br>
+
+<h1 id="对比App-bin与App-crc-bin"><a href="#对比App-bin与App-crc-bin" class="headerlink" title="对比App.bin与App_crc.bin"></a>对比App.bin与App_crc.bin</h1><hr>
+<h2 id="对比文件结尾"><a href="#对比文件结尾" class="headerlink" title="对比文件结尾"></a>对比文件结尾</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529134502.png" alt="文件对比"><br>如上所示，左边是App_crc.bin文件，右边是App.bin文件。可见，App_crc.bin文件比App.bin文件在尾部多了一个CRC32校验码。<br>在下一章节，将编写一个代码，计算App_crc.bin的整包的CRC32码（当然，最后四个字节除外），用STM32计算出来的CRC32码跟文件最后的CRC32码做对比。如果它们相同，即整个固件的完整性是没有问题的。如果它们不相同，那整个固件的完整性有问题，IAP升级失败。等待上位机的下一次OTA升级。</p>
+<h2 id="对比文件内容（App-crc-bin的最后4个字节除外）"><a href="#对比文件内容（App-crc-bin的最后4个字节除外）" class="headerlink" title="对比文件内容（App_crc.bin的最后4个字节除外）"></a>对比文件内容（App_crc.bin的最后4个字节除外）</h2><p>crc_add.bat脚本有没有将改动固件的内容呢？让ChatGPT帮我检查一下。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135519.png" alt="ChatGPT检查结果1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135610.png" alt="ChatGPT检查结果2"> </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STM32/" rel="tag"># STM32</a>
+              <a href="/tags/bootloader/" rel="tag"># bootloader</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/06/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9105-Keil%E4%BF%AE%E6%94%B9%E7%94%9F%E6%88%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%E4%B8%8E%E6%96%87%E4%BB%B6%E5%90%8D%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90bin%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6/" rel="prev" title="STM32F103_Bootloader程序开发05 - Keil修改生成文件的路径与文件名，自动生成bin格式文件">
+                  <i class="fa fa-angle-left"></i> STM32F103_Bootloader程序开发05 - Keil修改生成文件的路径与文件名，自动生成bin格式文件
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Wallace</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">7k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">25 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
