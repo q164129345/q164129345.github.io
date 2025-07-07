@@ -41,7 +41,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528171042.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528172042.png">
 <meta property="article:published_time" content="2025-07-06T02:46:40.000Z">
-<meta property="article:modified_time" content="2025-07-06T02:49:27.873Z">
+<meta property="article:modified_time" content="2025-07-07T23:47:28.623Z">
 <meta property="article:author" content="Wallace">
 <meta property="article:tag" content="STM32">
 <meta property="article:tag" content="bootloader">
@@ -145,7 +145,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -216,9 +216,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-07-06 10:46:40 / 修改时间：10:49:27" itemprop="dateCreated datePublished" datetime="2025-07-06T10:46:40+08:00">2025-07-06</time>
+      <time title="创建时间：2025-07-06 10:46:40" itemprop="dateCreated datePublished" datetime="2025-07-06T10:46:40+08:00">2025-07-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-07-08 07:47:28" itemprop="dateModified" datetime="2025-07-08T07:47:28+08:00">2025-07-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,7 +243,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>569</span>
+      <span>572</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -255,11 +261,21 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png" alt="STM32F103启动流程图"><br>本教程使用正点原子战舰板开发。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><hr>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png" alt="STM32F103启动流程图"><br>本教程使用正点原子战舰板开发。</p>
 <p>通过Keil的相关配置，可以灵活地修改输出文件的保存路径及文件名称。在Bootloader程序开发过程中，合理配置输出文件对于后续固件升级和自动化脚本处理至关重要。完成路径和文件名配置后，还可以借助Keil自带的fromelf.exe工具，将生成的axf文件转换为bin格式文件，便于后续烧录和升级操作。</p>
-<h1 id="修改生成文件的路径"><a href="#修改生成文件的路径" class="headerlink" title="修改生成文件的路径"></a>修改生成文件的路径</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164207.png" alt="创建Outputs文件夹"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164251.png" alt="Outputs文件夹位置"><br>如上所示，在MDK-ARM文件夹里创建Ouputs文件夹，这个文件夹用于存放Keil自动生成的文件。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164607.png" alt="Keil项目设置"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164819.png" alt="输出路径设置1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164904.png" alt="输出路径设置2"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165002.png" alt="输出路径设置3"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165058.png" alt="输出路径设置4"></p>
-<h1 id="修改生成的文件名"><a href="#修改生成的文件名" class="headerlink" title="修改生成的文件名"></a>修改生成的文件名</h1><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165215.png" alt="文件名设置入口"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165429.png" alt="文件名设置界面"></p>
-<h1 id="让Keil调用fromelf-exe生成升级用的bin文件"><a href="#让Keil调用fromelf-exe生成升级用的bin文件" class="headerlink" title="让Keil调用fromelf.exe生成升级用的bin文件"></a>让Keil调用fromelf.exe生成升级用的bin文件</h1><h2 id="什么是fromelf-exe？"><a href="#什么是fromelf-exe？" class="headerlink" title="什么是fromelf.exe？"></a>什么是fromelf.exe？</h2><p>这是 ARM Keil 自带的一个命令行工具，用于将编译生成的目标文件（axf&#x2F;elf格式）转换为其他格式（比如 bin、hex）。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170718.png" alt="fromelf工具说明"></p>
+<br>
+
+<h1 id="修改生成文件的路径"><a href="#修改生成文件的路径" class="headerlink" title="修改生成文件的路径"></a>修改生成文件的路径</h1><hr>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164207.png" alt="创建Outputs文件夹"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164251.png" alt="Outputs文件夹位置"><br>如上所示，在MDK-ARM文件夹里创建Ouputs文件夹，这个文件夹用于存放Keil自动生成的文件。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164607.png" alt="Keil项目设置"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164819.png" alt="输出路径设置1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164904.png" alt="输出路径设置2"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165002.png" alt="输出路径设置3"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165058.png" alt="输出路径设置4"></p>
+<br>
+
+<h1 id="修改生成的文件名"><a href="#修改生成的文件名" class="headerlink" title="修改生成的文件名"></a>修改生成的文件名</h1><hr>
+<p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165215.png" alt="文件名设置入口"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165429.png" alt="文件名设置界面"></p>
+<br>
+
+<h1 id="让Keil调用fromelf-exe生成升级用的bin文件"><a href="#让Keil调用fromelf-exe生成升级用的bin文件" class="headerlink" title="让Keil调用fromelf.exe生成升级用的bin文件"></a>让Keil调用fromelf.exe生成升级用的bin文件</h1><hr>
+<h2 id="什么是fromelf-exe？"><a href="#什么是fromelf-exe？" class="headerlink" title="什么是fromelf.exe？"></a>什么是fromelf.exe？</h2><p>这是 ARM Keil 自带的一个命令行工具，用于将编译生成的目标文件（axf&#x2F;elf格式）转换为其他格式（比如 bin、hex）。<br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170718.png" alt="fromelf工具说明"></p>
 <h2 id="生成App-bin"><a href="#生成App-bin" class="headerlink" title="生成App.bin"></a>生成App.bin</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170853.png" alt="配置fromelf命令1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528171042.png" alt="配置fromelf命令2"></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin --output .\Output\App.bin .\Outputs\App.axf</span><br></pre></td></tr></table></figure>
 <p>意思是：</p>
@@ -339,13 +355,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">8k</span>
+    <span title="站点总字数">9k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">29 分钟</span>
+    <span title="站点阅读时长">32 分钟</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动

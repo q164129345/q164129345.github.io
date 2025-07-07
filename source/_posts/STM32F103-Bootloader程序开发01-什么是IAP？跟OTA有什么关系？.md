@@ -7,30 +7,37 @@ description: 基于STM32F103ZET6的bootloader教程系列
 ---
 
 # 导言
+---
 ![硬件框架](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true)
 本教程基于正点原子战舰板开发。
 
 
 这是一个做bootloader程序开发经常会遇到的疑问。IAP 和 OTA 都和固件升级相关，但不是同一个概念，它们之间有交集，但又各自有特定的应用场景。
 
-# 什么是IAP(In-Application Programming)？
+<br>
 
+# 什么是IAP(In-Application Programming)？
+---
 **IAP，中文一般称为"应用程序内编程"或"在应用中自编程"。本质含义：MCU 在运行用户代码（App或Bootloader）时，通过自身的代码（而不是用外部编程器/仿真器）来擦写和更新片上 Flash 内容。** 典型的应用场景：在系统上线后，通过串口、CAN、USB、以太网等接口下载新固件，并写入指定Flash区，完成固件升级。
 
 ![IAP示意图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523105059.png?raw=true)
 
 实际场景：工程师用串口工具将固件下载到MCU，MCU通过IAP代码将固件烧写到App区。
 
-# 什么是OTA(Over-The-Air，空中下载/升级)？
+<br>
 
+# 什么是OTA(Over-The-Air，空中下载/升级)？
+---
 **OTA，直译就是"空中下载"或者"远程升级"。本质含义：利用无线通信（如WiFi、蓝牙、NB-IoT、4G/5G等），将新固件从服务器下载到设备，再进行固件升级。** 
 
 ![OTA示意图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250523093121.png?raw=true)
 
 实际场景：产品上线后，用户用手机APP或者设备自己通过WiFi下载新固件，MCU下载完成后，通过IAP流程将固件写入App区。
 
-# IAP跟OTA有什么关系？
+<br>
 
+# IAP跟OTA有什么关系？
+---
 - IAP 是一种升级机制/技术，它是固件升级的基础能力，让MCU可以自我更新程序。
 - OTA 是一种升级方式/场景，它是一套"如何把新固件送到设备"+"触发升级流程"的完整解决方案，实现的底层依赖于IAP。
 
@@ -41,8 +48,10 @@ description: 基于STM32F103ZET6的bootloader教程系列
 - IAP 可以独立使用，比如通过串口/USB升级（有线IAP）。
 - OTA 一定要依赖IAP，否则固件即使下载下来，MCU也无法自我刷新。
 
-# Bootloader跟IAP又是什么关系？
+<br>
 
+# Bootloader跟IAP又是什么关系？
+----
 ## Bootloader是什么？
 
 Bootloader（引导加载程序），是上电后第一个运行的程序，主要负责以下几个任务：

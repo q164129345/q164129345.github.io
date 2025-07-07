@@ -6,7 +6,7 @@ categories: [STM32]
 description: 基于STM32F103ZET6的bootloader教程系列
 ---
 # 导言
-
+---
 ![STM32F103启动流程图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png)
 本教程使用正点原子战舰板开发。
 
@@ -23,8 +23,10 @@ description: 基于STM32F103ZET6的bootloader教程系列
 github: https://github.com/q164129345/MCU_Develop/tree/main/bootloader04_stm32f103_jump_app
 gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader04_stm32f103_jump_app
 
-# Keil设置Flash与RAM
+<br>
 
+# Keil设置Flash与RAM
+---
 ## App程序
 
 ![App程序Flash设置](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250527105242.png)
@@ -41,7 +43,10 @@ RAM分成两部分：
 - IRAM1给程序使用。
 - IRAM2的大小刚好是8个字节，这里定义了一个全局变量update_flag，记得勾选`No Init`。
 
+<br>
+
 # 代码
+---
 
 ## App程序
 
@@ -344,8 +349,10 @@ extern "C" {
 ### main.c
 ![bootloader的main.c代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528120209.png)
 
-# 测试
+<br>
 
+# 测试
+---
 ## 编译、烧录App
 ![编译烧录App截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528135412.png)
 如上所示，先编译、烧录App到STM32F103ZET6上。
@@ -365,8 +372,10 @@ extern "C" {
 ![串口助手截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528141153.png)
 如上所示，从电脑的串口助手收到的消息看来，App程序正在执行！
 
-# 细节补充
+<br>
 
+# 细节补充
+---
 ## 本章节最关键的函数IAP_Ready_To_Jump_App()
 
 ### 赋值 BOOTLOADER_RESET_MAGIC_WORD 的目的

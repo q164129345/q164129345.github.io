@@ -7,6 +7,7 @@ description: 基于STM32F103ZET6的bootloader教程系列
 ---
 
 # 导言
+---
 ![硬件框架](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png?raw=true)
 本教程基于正点原子战舰板开发。
 
@@ -22,8 +23,10 @@ description: 基于STM32F103ZET6的bootloader教程系列
 
 每个模块各司其职，既保证了流程的清晰、易维护，又为后续功能拓展（如安全保护、异常处理）预留了接口。通过模块化设计，能够高效实现与上位机的安全固件升级，显著提升系统的可靠性和可维护性。
 
-# Flash内存规划
+<br>
 
+# Flash内存规划
+---
 ![STM32F103 Flash内存分区图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525112656.png?raw=true)
 
 1. **bootloader区**
@@ -50,8 +53,10 @@ description: 基于STM32F103ZET6的bootloader教程系列
 
 ![Flash分区详细布局图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528145633.png?raw=true)
 
-# 代码
+<br>
 
+# 代码
+---
 ## flash_map.h
 
 将上面的分区细节，落实到代码flash_map.h。
@@ -117,7 +122,10 @@ extern "C" {
 
 ```
 
+<br>
+
 # Keil配置
+---
 
 ## bootloader程序的Keil配置
 
@@ -127,7 +135,10 @@ extern "C" {
 
 ![App程序Keil配置截图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184622.png?raw=true)
 
+<br>
+
 # 细节补充
+---
 
 ## STM32F103ZET6的Flash布局
 

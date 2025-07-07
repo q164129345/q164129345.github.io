@@ -7,7 +7,7 @@ description: 基于STM32F103ZET6的bootloader教程系列
 ---
 
 # 导言
-
+---
 ![STM32F103启动流程图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250703230116.png)
 本教程使用正点原子战舰板开发。
 
@@ -21,8 +21,10 @@ description: 基于STM32F103ZET6的bootloader教程系列
 github: https://github.com/q164129345/MCU_Develop/tree/main/bootloader03_stm32f103_boot_entry
 gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader03_stm32f103_boot_entry
 
-# 代码
+<br>
 
+# 代码
+---
 ## 1.1、boot_entry.c
 ```c
 #include "boot_entry.h"
@@ -91,7 +93,10 @@ extern "C" {
 ![运行结果截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250526200442.png)
 从RTT Viewer打印的log看来，**boot_entry.c的函数`_SystemStart()`居然比main.c的函数`main()`更早运行。** 怎样做到的？什么原理？
 
+<br>
+
 # 新知识点 - C/C++的构造函数（constructor）机制
+---
 
 ## STM32F103上电后的启动流程
 
