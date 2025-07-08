@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151212.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151838.png">
 <meta property="article:published_time" content="2025-07-07T23:42:15.000Z">
-<meta property="article:modified_time" content="2025-07-07T23:46:23.024Z">
+<meta property="article:modified_time" content="2025-07-08T00:15:36.930Z">
 <meta property="article:author" content="Wallace">
 <meta property="article:tag" content="STM32">
 <meta property="article:tag" content="bootloader">
@@ -144,7 +144,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -166,7 +166,7 @@
       <!-- 文章目录区域 - 有目录时显示 -->
         <div class="post-toc-wrap" style="margin-top: 25px !important; padding-top: 25px !important;">
           <div class="post-toc-title" style="font-size: 16px !important; color: #666 !important; text-align: center; margin-bottom: 20px !important; padding: 15px !important; background-color: #f8f8f8 !important; border-radius: 8px !important; font-weight: 600 !important; border: 1px solid #e0e0e0 !important;">文章目录</div>
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">导言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96crc-add-bat%E8%84%9A%E6%9C%AC"><span class="nav-number">1.1.</span> <span class="nav-text">优化crc_add.bat脚本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#op-flash-c"><span class="nav-number">2.1.</span> <span class="nav-text">op_flash.c</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#op-flash-h"><span class="nav-number">2.2.</span> <span class="nav-text">op_flash.h</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fw-verify-c"><span class="nav-number">2.3.</span> <span class="nav-text">fw_verify.c</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fw-verify-h"><span class="nav-number">2.4.</span> <span class="nav-text">fw_verify.h</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#main-c"><span class="nav-number">2.5.</span> <span class="nav-text">main.c</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%85"><span class="nav-number">3.</span> <span class="nav-text">细节补充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0crc-add-bat%E8%84%9A%E6%9C%AC"><span class="nav-number">3.1.</span> <span class="nav-text">新crc_add.bat脚本</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-text">导言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96crc-add-bat%E8%84%9A%E6%9C%AC"><span class="nav-text">优化crc_add.bat脚本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%A3%E7%A0%81"><span class="nav-text">一、代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E3%80%81op-flash-c"><span class="nav-text">1.1、op_flash.c</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2%E3%80%81op-flash-h"><span class="nav-text">1.2、op_flash.h</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3%E3%80%81fw-verify-c"><span class="nav-text">1.3、fw_verify.c</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4%E3%80%81fw-verify-h"><span class="nav-text">1.4、fw_verify.h</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5%E3%80%81main-c"><span class="nav-text">1.5、main.c</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%85"><span class="nav-text">二、细节补充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81%E6%96%B0crc-add-bat%E8%84%9A%E6%9C%AC"><span class="nav-text">2.1、新crc_add.bat脚本</span></a></li></ol></li></ol></div>
         </div>
     </div>
 
@@ -217,7 +217,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-07-08 07:42:15 / 修改时间：07:46:23" itemprop="dateCreated datePublished" datetime="2025-07-08T07:42:15+08:00">2025-07-08</time>
+      <time title="创建时间：2025-07-08 07:42:15 / 修改时间：08:15:36" itemprop="dateCreated datePublished" datetime="2025-07-08T07:42:15+08:00">2025-07-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -236,7 +236,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>617</span>
+      <span>625</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -264,16 +264,16 @@
 <p>项目地址：<br>github: <a target="_blank" rel="noopener" href="https://github.com/q164129345/MCU_Develop/tree/main/bootloader08_stm32f103_op_flash">https://github.com/q164129345/MCU_Develop/tree/main/bootloader08_stm32f103_op_flash</a><br>gitee(国内): <a target="_blank" rel="noopener" href="https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader08_stm32f103_op_flash">https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader08_stm32f103_op_flash</a></p>
 <br>
 
-<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><hr>
-<h2 id="op-flash-c"><a href="#op-flash-c" class="headerlink" title="op_flash.c"></a>op_flash.c</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605145725.png" alt="op_flash.c代码1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605145902.png" alt="op_flash.c代码2"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605150039.png" alt="op_flash.c代码3"></p>
-<h2 id="op-flash-h"><a href="#op-flash-h" class="headerlink" title="op_flash.h"></a>op_flash.h</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605150522.png" alt="op_flash.h代码"></p>
-<h2 id="fw-verify-c"><a href="#fw-verify-c" class="headerlink" title="fw_verify.c"></a>fw_verify.c</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151050.png" alt="fw_verify.c代码"></p>
-<h2 id="fw-verify-h"><a href="#fw-verify-h" class="headerlink" title="fw_verify.h"></a>fw_verify.h</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151212.png" alt="fw_verify.h代码"></p>
-<h2 id="main-c"><a href="#main-c" class="headerlink" title="main.c"></a>main.c</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151838.png" alt="main.c代码"><br>main.c代码只介绍本章节的重要部分，其他部分请阅读源码。</p>
+<h1 id="一、代码"><a href="#一、代码" class="headerlink" title="一、代码"></a>一、代码</h1><hr>
+<h2 id="1-1、op-flash-c"><a href="#1-1、op-flash-c" class="headerlink" title="1.1、op_flash.c"></a>1.1、op_flash.c</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605145725.png" alt="op_flash.c代码1"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605145902.png" alt="op_flash.c代码2"><br><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605150039.png" alt="op_flash.c代码3"></p>
+<h2 id="1-2、op-flash-h"><a href="#1-2、op-flash-h" class="headerlink" title="1.2、op_flash.h"></a>1.2、op_flash.h</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605150522.png" alt="op_flash.h代码"></p>
+<h2 id="1-3、fw-verify-c"><a href="#1-3、fw-verify-c" class="headerlink" title="1.3、fw_verify.c"></a>1.3、fw_verify.c</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151050.png" alt="fw_verify.c代码"></p>
+<h2 id="1-4、fw-verify-h"><a href="#1-4、fw-verify-h" class="headerlink" title="1.4、fw_verify.h"></a>1.4、fw_verify.h</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151212.png" alt="fw_verify.h代码"></p>
+<h2 id="1-5、main-c"><a href="#1-5、main-c" class="headerlink" title="1.5、main.c"></a>1.5、main.c</h2><p><img src="https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151838.png" alt="main.c代码"><br>main.c代码只介绍本章节的重要部分，其他部分请阅读源码。</p>
 <br>
 
-<h1 id="细节补充"><a href="#细节补充" class="headerlink" title="细节补充"></a>细节补充</h1><hr>
-<h2 id="新crc-add-bat脚本"><a href="#新crc-add-bat脚本" class="headerlink" title="新crc_add.bat脚本"></a>新crc_add.bat脚本</h2><p>可以基于这个版本修改其他玩法，比如App_crc.bin的名字改为实际的项目名称。比如，robot_vcu_crc.bin等</p>
+<h1 id="二、细节补充"><a href="#二、细节补充" class="headerlink" title="二、细节补充"></a>二、细节补充</h1><hr>
+<h2 id="2-1、新crc-add-bat脚本"><a href="#2-1、新crc-add-bat脚本" class="headerlink" title="2.1、新crc_add.bat脚本"></a>2.1、新crc_add.bat脚本</h2><p>可以基于这个版本修改其他玩法，比如App_crc.bin的名字改为实际的项目名称。比如，robot_vcu_crc.bin等</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">rem -------------</span><br><span class="line">rem  Add CRC32 to App.bin</span><br><span class="line">rem -------------</span><br><span class="line"></span><br><span class="line">setlocal enabledelayedexpansion</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> INPUT_FILE=.\Output\App.bin</span><br><span class="line"><span class="built_in">set</span> OUTPUT_FILE=.\Output\App_crc.bin</span><br><span class="line"></span><br><span class="line">rem ── 1. 计算原始 BIN 长度 ──</span><br><span class="line"><span class="keyword">for</span> %%i <span class="keyword">in</span> (<span class="string">&quot;%INPUT_FILE%&quot;</span>) <span class="keyword">do</span> <span class="built_in">set</span> BIN_SIZE=%%~zi</span><br><span class="line"><span class="built_in">echo</span> App.bin size            : %BIN_SIZE% bytes</span><br><span class="line"></span><br><span class="line">rem ── 2. 追加 CRC32（小端）到文件尾 ──</span><br><span class="line">.\srec_cat.exe ^</span><br><span class="line">    <span class="string">&quot;%INPUT_FILE%&quot;</span> -Binary ^</span><br><span class="line">    -crop 0 %BIN_SIZE% ^</span><br><span class="line">    -crc32-l-e %BIN_SIZE% ^</span><br><span class="line">    -o <span class="string">&quot;%OUTPUT_FILE%&quot;</span> -Binary</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> not exist <span class="string">&quot;%OUTPUT_FILE%&quot;</span> (</span><br><span class="line">    <span class="built_in">echo</span> Failed to generate CRC32 bin file!</span><br><span class="line">    goto :eof</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">rem ── 3. 获取追加 CRC32 后 BIN 长度 ──</span><br><span class="line"><span class="keyword">for</span> %%i <span class="keyword">in</span> (<span class="string">&quot;%OUTPUT_FILE%&quot;</span>) <span class="keyword">do</span> <span class="built_in">set</span> BIN_SIZE_CRC=%%~zi</span><br><span class="line"></span><br><span class="line">rem ── 4. 裁剪最后 4 字节并打印 CRC32 ──</span><br><span class="line"><span class="built_in">set</span> /a END_ADDR=%BIN_SIZE%+4</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> /f <span class="string">&quot;tokens=2-5&quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;</span></span><br><span class="line"><span class="string">    .\srec_cat.exe &quot;%OUTPUT_FILE%&quot; -Binary ^</span></span><br><span class="line"><span class="string">        -crop %BIN_SIZE% !END_ADDR! ^</span></span><br><span class="line"><span class="string">        -o - -hex-dump</span></span><br><span class="line"><span class="string">&#x27;</span>) <span class="keyword">do</span> (</span><br><span class="line">    <span class="built_in">set</span> CRC_B0=%%a</span><br><span class="line">    <span class="built_in">set</span> CRC_B1=%%b</span><br><span class="line">    <span class="built_in">set</span> CRC_B2=%%c</span><br><span class="line">    <span class="built_in">set</span> CRC_B3=%%d</span><br><span class="line">    goto :PRINT_CRC</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">:PRINT_CRC</span><br><span class="line"><span class="built_in">set</span> CRC32=0x!CRC_B3!!CRC_B2!!CRC_B1!!CRC_B0!</span><br><span class="line"><span class="built_in">echo</span> CRC32 (little-endian stored): !CRC32!</span><br><span class="line"><span class="built_in">echo</span> App_crc.bin size        : !BIN_SIZE_CRC! bytes</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> CRC32 appended successfully: %OUTPUT_FILE%</span><br><span class="line">endlocal</span><br></pre></td></tr></table></figure>
 
 
@@ -298,6 +298,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/07/08/STM32F103-Bootloader%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%9109-%E6%81%B0%E5%88%B0%E5%A5%BD%E5%A4%84%E7%9A%84Ymodem%E5%8D%8F%E8%AE%AE/" rel="next" title="STM32F103_Bootloader程序开发09 - 恰到好处的Ymodem协议">
+                  STM32F103_Bootloader程序开发09 - 恰到好处的Ymodem协议 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -328,13 +331,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">9k</span>
+    <span title="站点总字数">16k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">32 分钟</span>
+    <span title="站点阅读时长">1:01</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动

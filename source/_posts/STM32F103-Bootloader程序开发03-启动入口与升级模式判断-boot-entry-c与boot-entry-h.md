@@ -23,7 +23,7 @@ gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader03_st
 
 <br>
 
-# 代码
+# 一、代码
 ---
 ## 1.1、boot_entry.c
 ```c
@@ -61,7 +61,7 @@ static void _SystemStart(void)
 
 ```
 
-## boot_entry.h
+## 1.2、boot_entry.h
 
 ```c
 #ifndef __BOOT_ENTRY_H
@@ -83,22 +83,22 @@ extern "C" {
 
 ```
 
-## 代码编译、下载
+## 1.3、代码编译、下载
 
 ![编译结果截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250526200242.png)
 错误0,警告0
 
-## 运行代码
+## 1.4、运行代码
 
 ![运行结果截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250526200442.png)
 从RTT Viewer打印的log看来，**boot_entry.c的函数`_SystemStart()`居然比main.c的函数`main()`更早运行。** 怎样做到的？什么原理？
 
 <br>
 
-# 新知识点 - C/C++的构造函数（constructor）机制
+# 二、新知识点 - C/C++的构造函数（constructor）机制
 ---
 
-## STM32F103上电后的启动流程
+## 2.1、STM32F103上电后的启动流程
 
 标准的启动流程如下：
 1. 上电/复位
@@ -109,7 +109,7 @@ extern "C" {
 4. Reset_Handler 里会调用 SystemInit，然后进入 main()
 也就是说，按标准流程，**应该是 main() 才是C代码入口点。**
 
-## 为什么_SystemStart()会先执行？
+## 2.2、为什么_SystemStart()会先执行？
 
 **凡是被加了__attribute__((constructor))的函数，在main()之前被自动调用一次。** 这里的__attribute__((constructor))是GCC/ARMCC/KEIL等编译器的一个特殊拓展属性。这是编译器层面的"静态初始化"机制，与C++里的全局对象构造类似。
 
@@ -117,12 +117,12 @@ extern "C" {
 
 ![构造函数机制示意图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250526202203.png)
 
-## 为什么要让_SystemStart()比main()先执行？
+## 2.3、为什么要让_SystemStart()比main()先执行？
 
 ![无需deinit示意图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250526202651.png)
 **为实现"无须deinit"，才需要让_SystemStart()比main()先执行。** 如上图摘自[mOTA](https://gitee.com/DinoHaw/mOTA) 项目，当我看到bootloader程序可以实现"无须deinit"时，我真的非常激动。要把复杂的bootloader程序要把环境清理干净，真的折腾、调试死你。而且，STM32只有HAL库才有官方编写deinit()函数，高效的、优雅的LL库居然没有。
 
-## 如果编译器/链接器不支持，怎么办？
+## 2.4、如果编译器/链接器不支持，怎么办？
 
 ![替代方案示意图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250526203723.png)
 

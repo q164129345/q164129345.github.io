@@ -22,11 +22,11 @@ gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader07_st
 
 <br>
 
-# 将App_crc.bin下载到App下载缓存区
+# 一、将App_crc.bin下载到App下载缓存区
 ---
 项目当前还没有开发跟上位机的通讯，为了验证"对App下载缓存区的固件进行CRC32的校验"。可以先使用下载器（J-LINK或者ST-LINK）将固件下载到App缓存区。
 
-## J-Flash将App_crc.bin下载到App下载缓存区
+## 1.1、J-Flash将App_crc.bin下载到App下载缓存区
 ![J-Flash配置步骤1](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529185547.png)
 ![J-Flash配置步骤2](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529190916.png)
 ![J-Flash配置步骤3](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529191000.png)
@@ -36,15 +36,15 @@ gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader07_st
 ![J-Flash配置步骤7](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529191354.png)
 ![J-Flash配置步骤8](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529191428.png)
 
-## Keil的debug模式，Viewer->Memory2核对固件内容
+## 1.2、Keil的debug模式，Viewer->Memory2核对固件内容
 
 ![Keil内存查看器](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529191910.png)
 
 <br>
 
-# bootloader程序代码
+# 二、bootloader程序代码
 ---
-## soft_crc32.c
+## 2.1、soft_crc32.c
 ```c
 #include "soft_crc32.h"
 #include <string.h>
@@ -205,14 +205,14 @@ uint32_t Calculate_Firmware_CRC32_SW(uint32_t flash_addr, uint32_t total_len);
 
 ```
 
-## main.c
+## 2.2、main.c
 ![串口输出结果1](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529192508.png)
 ![串口输出结果2](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250530091816.png)
 ![串口输出结果3](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529192559.png)
 
 <br>
 
-# 测试代码
+# 三、测试代码
 ---
 ![实验结论](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529192850.png)
 CRC32校验通过，App下载区的固件完整性没有问题。

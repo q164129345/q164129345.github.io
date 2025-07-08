@@ -39,6 +39,46 @@
   
   .post-toc {
     margin-top: 15px !important;
+    max-height: 400px !important;
+    overflow-y: auto !important;
+    padding-right: 10px !important;
+    font-size: 12px !important;
+    
+    // 优化 TOC 项目的显示
+    .nav-item {
+      line-height: 1.5 !important;
+      margin-bottom: 2px !important;
+      
+      a {
+        padding: 2px 0 !important;
+        display: block;
+        font-size: 12px !important;
+      }
+    }
+    
+    // 不同层级的缩进
+    ol {
+      padding-left: 12px !important;
+    }
+    
+    // 自定义滚动条样式
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+      
+      &:hover {
+        background: #a8a8a8;
+      }
+    }
   }
 }
 
@@ -68,6 +108,20 @@
       color: #ccc !important;
       border-bottom-color: #444 !important;
       background-color: #2a2a2a;
+    }
+    
+    .post-toc {
+      &::-webkit-scrollbar-track {
+        background: #333;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: #666;
+        
+        &:hover {
+          background: #888;
+        }
+      }
     }
   }
 } 

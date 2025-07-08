@@ -36,30 +36,30 @@ gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader08_st
 
 <br>
 
-# 代码
+# 一、代码
 ---
-## op_flash.c
+## 1.1、op_flash.c
 ![op_flash.c代码1](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605145725.png)
 ![op_flash.c代码2](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605145902.png)
 ![op_flash.c代码3](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605150039.png)
-## op_flash.h
+## 1.2、op_flash.h
 ![op_flash.h代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605150522.png)
 
-## fw_verify.c
+## 1.3、fw_verify.c
 ![fw_verify.c代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151050.png)
 
-## fw_verify.h
+## 1.4、fw_verify.h
 ![fw_verify.h代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151212.png)
 
-## main.c
+## 1.5、main.c
 ![main.c代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250605151838.png)
 main.c代码只介绍本章节的重要部分，其他部分请阅读源码。
 
 <br>
 
-# 细节补充
+# 二、细节补充
 ---
-## 新crc_add.bat脚本
+## 2.1、新crc_add.bat脚本
 可以基于这个版本修改其他玩法，比如App_crc.bin的名字改为实际的项目名称。比如，robot_vcu_crc.bin等
 ```sh
 @echo off

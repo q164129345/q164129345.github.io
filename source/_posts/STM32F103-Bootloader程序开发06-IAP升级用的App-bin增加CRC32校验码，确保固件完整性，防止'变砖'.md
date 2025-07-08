@@ -26,18 +26,18 @@ gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader06_st
 
 <br>
 
-# 让Keil编译完代码后，自动生成App_crc.bin
+# 一、让Keil编译完代码后，自动生成App_crc.bin
 ----
-## 准备工具
+## 1.1、准备工具
 1. srec_cat.exe（也可以去官网下载）
 2. crc_add.bat(我已经编写好了，拿来用就好)
 ![工具文件](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529114543.png)
 如上所示，这两个工具已经在App的MDK-ARM文件夹里，自行领取即可。
 
-## 让Keil编译完之后，自动调用crc_add.bat脚本，生成App_crc.bin文件
+## 1.2、让Keil编译完之后，自动调用crc_add.bat脚本，生成App_crc.bin文件
 ![Keil编译配置](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529120215.png)
 
-## 编译一次，看看效果
+## 1.3、编译一次，看看效果
 ![编译后生成文件](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/After%20Build.gif)
 如上所示，编译完成之后，顺利生成两个bin文件。
 
@@ -48,14 +48,14 @@ gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader06_st
 
 <br>
 
-# 对比App.bin与App_crc.bin
+# 二、对比App.bin与App_crc.bin
 ---
-## 对比文件结尾
+## 2.1、对比文件结尾
 ![文件对比](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529134502.png)
 如上所示，左边是App_crc.bin文件，右边是App.bin文件。可见，App_crc.bin文件比App.bin文件在尾部多了一个CRC32校验码。
 在下一章节，将编写一个代码，计算App_crc.bin的整包的CRC32码（当然，最后四个字节除外），用STM32计算出来的CRC32码跟文件最后的CRC32码做对比。如果它们相同，即整个固件的完整性是没有问题的。如果它们不相同，那整个固件的完整性有问题，IAP升级失败。等待上位机的下一次OTA升级。
 
-## 对比文件内容（App_crc.bin的最后4个字节除外）
+## 2.2、对比文件内容（App_crc.bin的最后4个字节除外）
 crc_add.bat脚本有没有将改动固件的内容呢？让ChatGPT帮我检查一下。
 ![ChatGPT检查结果1](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135519.png)
 ![ChatGPT检查结果2](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250529135610.png) 

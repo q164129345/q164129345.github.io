@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525185104.png?raw=true">
 <meta property="og:image" content="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525185852.png?raw=true">
 <meta property="article:published_time" content="2025-07-02T16:10:34.000Z">
-<meta property="article:modified_time" content="2025-07-07T23:50:35.580Z">
+<meta property="article:modified_time" content="2025-07-08T00:21:01.079Z">
 <meta property="article:author" content="Wallace">
 <meta property="article:tag" content="STM32">
 <meta property="article:tag" content="bootloader">
@@ -139,7 +139,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -161,7 +161,7 @@
       <!-- 文章目录区域 - 有目录时显示 -->
         <div class="post-toc-wrap" style="margin-top: 25px !important; padding-top: 25px !important;">
           <div class="post-toc-title" style="font-size: 16px !important; color: #666 !important; text-align: center; margin-bottom: 20px !important; padding: 15px !important; background-color: #f8f8f8 !important; border-radius: 8px !important; font-weight: 600 !important; border: 1px solid #e0e0e0 !important;">文章目录</div>
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">导言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flash%E5%86%85%E5%AD%98%E8%A7%84%E5%88%92"><span class="nav-number">2.</span> <span class="nav-text">Flash内存规划</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#flash-map-h"><span class="nav-number">3.1.</span> <span class="nav-text">flash_map.h</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Keil%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">Keil配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bootloader%E7%A8%8B%E5%BA%8F%E7%9A%84Keil%E9%85%8D%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text">bootloader程序的Keil配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#App%E7%A8%8B%E5%BA%8F%E7%9A%84Keil%E9%85%8D%E7%BD%AE"><span class="nav-number">4.2.</span> <span class="nav-text">App程序的Keil配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%85"><span class="nav-number">5.</span> <span class="nav-text">细节补充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#STM32F103ZET6%E7%9A%84Flash%E5%B8%83%E5%B1%80"><span class="nav-number">5.1.</span> <span class="nav-text">STM32F103ZET6的Flash布局</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-text">导言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Flash%E5%86%85%E5%AD%98%E8%A7%84%E5%88%92"><span class="nav-text">一、Flash内存规划</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81"><span class="nav-text">二、代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81flash-map-h"><span class="nav-text">2.1、flash_map.h</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81Keil%E9%85%8D%E7%BD%AE"><span class="nav-text">三、Keil配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1%E3%80%81bootloader%E7%A8%8B%E5%BA%8F%E7%9A%84Keil%E9%85%8D%E7%BD%AE"><span class="nav-text">3.1、bootloader程序的Keil配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2%E3%80%81App%E7%A8%8B%E5%BA%8F%E7%9A%84Keil%E9%85%8D%E7%BD%AE"><span class="nav-text">3.2、App程序的Keil配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%85"><span class="nav-text">四、细节补充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1%E3%80%81STM32F103ZET6%E7%9A%84Flash%E5%B8%83%E5%B1%80"><span class="nav-text">4.1、STM32F103ZET6的Flash布局</span></a></li></ol></li></ol></div>
         </div>
     </div>
 
@@ -218,7 +218,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-07-08 07:50:35" itemprop="dateModified" datetime="2025-07-08T07:50:35+08:00">2025-07-08</time>
+      <time title="修改时间：2025-07-08 08:21:01" itemprop="dateModified" datetime="2025-07-08T08:21:01+08:00">2025-07-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,7 +237,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -269,7 +269,7 @@
 <p>每个模块各司其职，既保证了流程的清晰、易维护，又为后续功能拓展（如安全保护、异常处理）预留了接口。通过模块化设计，能够高效实现与上位机的安全固件升级，显著提升系统的可靠性和可维护性。</p>
 <br>
 
-<h1 id="Flash内存规划"><a href="#Flash内存规划" class="headerlink" title="Flash内存规划"></a>Flash内存规划</h1><hr>
+<h1 id="一、Flash内存规划"><a href="#一、Flash内存规划" class="headerlink" title="一、Flash内存规划"></a>一、Flash内存规划</h1><hr>
 <p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525112656.png?raw=true" alt="STM32F103 Flash内存分区图"></p>
 <ol>
 <li><p><strong>bootloader区</strong></p>
@@ -306,19 +306,19 @@
 <p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528145633.png?raw=true" alt="Flash分区详细布局图"></p>
 <br>
 
-<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><hr>
-<h2 id="flash-map-h"><a href="#flash-map-h" class="headerlink" title="flash_map.h"></a>flash_map.h</h2><p>将上面的分区细节，落实到代码flash_map.h。</p>
+<h1 id="二、代码"><a href="#二、代码" class="headerlink" title="二、代码"></a>二、代码</h1><hr>
+<h2 id="2-1、flash-map-h"><a href="#2-1、flash-map-h" class="headerlink" title="2.1、flash_map.h"></a>2.1、flash_map.h</h2><p>将上面的分区细节，落实到代码flash_map.h。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @file    flash_map.h</span></span><br><span class="line"><span class="comment"> * @brief   STM32F103ZET6 Flash分区地址与大小常量定义</span></span><br><span class="line"><span class="comment"> * @author  Wallace.zhang</span></span><br><span class="line"><span class="comment"> * @date    2025-05-25</span></span><br><span class="line"><span class="comment"> * @version 1.0.0</span></span><br><span class="line"><span class="comment"> * @copyright</span></span><br><span class="line"><span class="comment"> * (C) 2025 Wallace.zhang. 保留所有权利.</span></span><br><span class="line"><span class="comment"> * @license SPDX-License-Identifier: MIT</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __FLASH_MAP_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __FLASH_MAP_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * @brief STM32F103ZET6 Flash 基础参数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STM32_FLASH_BASE_ADDR      0x08000000U      <span class="comment">/**&lt; Flash起始基地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STM32_FLASH_SIZE           (512 * 1024U)    <span class="comment">/**&lt; Flash总大小（字节） */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STM32_FLASH_PAGE_SIZE      (2 * 1024U)      <span class="comment">/**&lt; Flash单页大小（字节） */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Bootloader区</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_BOOT_START_ADDR      0x08000000U      <span class="comment">/**&lt; Bootloader起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_BOOT_END_ADDR        0x0800FFFFU      <span class="comment">/**&lt; Bootloader结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_BOOT_SIZE            (FLASH_BOOT_END_ADDR - FLASH_BOOT_START_ADDR + 1) <span class="comment">/**&lt; Bootloader区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 主程序App区</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_APP_START_ADDR       0x08010000U      <span class="comment">/**&lt; App起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_APP_END_ADDR         0x0803FFFFU      <span class="comment">/**&lt; App结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_APP_SIZE             (FLASH_APP_END_ADDR - FLASH_APP_START_ADDR + 1)   <span class="comment">/**&lt; App区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief App缓存区（新固件下载区）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_DL_START_ADDR        0x08040000U      <span class="comment">/**&lt; 下载区起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_DL_END_ADDR          0x0806FFFFU      <span class="comment">/**&lt; 下载区结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_DL_SIZE              (FLASH_DL_END_ADDR - FLASH_DL_START_ADDR + 1)     <span class="comment">/**&lt; 下载区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 参数区（用户参数、历史数据等）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_PARAM_START_ADDR     0x08070000U      <span class="comment">/**&lt; 参数区起始地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_PARAM_END_ADDR       0x0807FFFFU      <span class="comment">/**&lt; 参数区结束地址 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FLASH_PARAM_SIZE           (FLASH_PARAM_END_ADDR - FLASH_PARAM_START_ADDR + 1) <span class="comment">/**&lt; 参数区大小 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* __FLASH_MAP_H */</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <br>
 
-<h1 id="Keil配置"><a href="#Keil配置" class="headerlink" title="Keil配置"></a>Keil配置</h1><hr>
-<h2 id="bootloader程序的Keil配置"><a href="#bootloader程序的Keil配置" class="headerlink" title="bootloader程序的Keil配置"></a>bootloader程序的Keil配置</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184402.png?raw=true" alt="Bootloader程序Keil配置截图"></p>
-<h2 id="App程序的Keil配置"><a href="#App程序的Keil配置" class="headerlink" title="App程序的Keil配置"></a>App程序的Keil配置</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184622.png?raw=true" alt="App程序Keil配置截图"></p>
+<h1 id="三、Keil配置"><a href="#三、Keil配置" class="headerlink" title="三、Keil配置"></a>三、Keil配置</h1><hr>
+<h2 id="3-1、bootloader程序的Keil配置"><a href="#3-1、bootloader程序的Keil配置" class="headerlink" title="3.1、bootloader程序的Keil配置"></a>3.1、bootloader程序的Keil配置</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184402.png?raw=true" alt="Bootloader程序Keil配置截图"></p>
+<h2 id="3-2、App程序的Keil配置"><a href="#3-2、App程序的Keil配置" class="headerlink" title="3.2、App程序的Keil配置"></a>3.2、App程序的Keil配置</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184622.png?raw=true" alt="App程序Keil配置截图"></p>
 <br>
 
-<h1 id="细节补充"><a href="#细节补充" class="headerlink" title="细节补充"></a>细节补充</h1><hr>
-<h2 id="STM32F103ZET6的Flash布局"><a href="#STM32F103ZET6的Flash布局" class="headerlink" title="STM32F103ZET6的Flash布局"></a>STM32F103ZET6的Flash布局</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525185104.png?raw=true" alt="STM32F103ZET6 Flash页面布局"><br><strong>STM32F103ZET6属于大容量产品，内存块划分为256个2K字节页。</strong> 从这个知识可以得到如下信息：</p>
+<h1 id="四、细节补充"><a href="#四、细节补充" class="headerlink" title="四、细节补充"></a>四、细节补充</h1><hr>
+<h2 id="4-1、STM32F103ZET6的Flash布局"><a href="#4-1、STM32F103ZET6的Flash布局" class="headerlink" title="4.1、STM32F103ZET6的Flash布局"></a>4.1、STM32F103ZET6的Flash布局</h2><p><img src="https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525185104.png?raw=true" alt="STM32F103ZET6 Flash页面布局"><br><strong>STM32F103ZET6属于大容量产品，内存块划分为256个2K字节页。</strong> 从这个知识可以得到如下信息：</p>
 <ol>
 <li>Bootloader：第0页到第31页（共32页）</li>
 <li>App：第32页到第127页（共96页）</li>
@@ -380,13 +380,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">9k</span>
+    <span title="站点总字数">16k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">32 分钟</span>
+    <span title="站点阅读时长">1:01</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动

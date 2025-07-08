@@ -14,7 +14,7 @@ description: 基于STM32F103ZET6的bootloader教程系列
 
 <br>
 
-# 修改生成文件的路径
+# 一、修改生成文件的路径
 ---
 ![创建Outputs文件夹](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164207.png)
 ![Outputs文件夹位置](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528164251.png)
@@ -27,20 +27,20 @@ description: 基于STM32F103ZET6的bootloader教程系列
 
 <br>
 
-# 修改生成的文件名
+# 二、修改生成的文件名
 ---
 ![文件名设置入口](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165215.png)
 ![文件名设置界面](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528165429.png)
 
 <br>
 
-# 让Keil调用fromelf.exe生成升级用的bin文件
+# 三、让Keil调用fromelf.exe生成升级用的bin文件
 ---
-## 什么是fromelf.exe？
+## 3.1、什么是fromelf.exe？
 这是 ARM Keil 自带的一个命令行工具，用于将编译生成的目标文件（axf/elf格式）转换为其他格式（比如 bin、hex）。
 ![fromelf工具说明](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170718.png)
 
-## 生成App.bin
+## 3.2、生成App.bin
 ![配置fromelf命令1](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528170853.png)
 ![配置fromelf命令2](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528171042.png)
 ```sh

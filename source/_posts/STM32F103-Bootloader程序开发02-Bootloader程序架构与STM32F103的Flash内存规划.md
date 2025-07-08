@@ -25,7 +25,7 @@ description: 基于STM32F103ZET6的bootloader教程系列
 
 <br>
 
-# Flash内存规划
+# 一、Flash内存规划
 ---
 ![STM32F103 Flash内存分区图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525112656.png?raw=true)
 
@@ -55,9 +55,9 @@ description: 基于STM32F103ZET6的bootloader教程系列
 
 <br>
 
-# 代码
+# 二、代码
 ---
-## flash_map.h
+## 2.1、flash_map.h
 
 将上面的分区细节，落实到代码flash_map.h。
 ```c
@@ -124,23 +124,23 @@ extern "C" {
 
 <br>
 
-# Keil配置
+# 三、Keil配置
 ---
 
-## bootloader程序的Keil配置
+## 3.1、bootloader程序的Keil配置
 
 ![Bootloader程序Keil配置截图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184402.png?raw=true)
 
-## App程序的Keil配置
+## 3.2、App程序的Keil配置
 
 ![App程序Keil配置截图](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525184622.png?raw=true)
 
 <br>
 
-# 细节补充
+# 四、细节补充
 ---
 
-## STM32F103ZET6的Flash布局
+## 4.1、STM32F103ZET6的Flash布局
 
 ![STM32F103ZET6 Flash页面布局](https://github.com/q164129345/Obsidian_Repo/blob/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250525185104.png?raw=true)
 **STM32F103ZET6属于大容量产品，内存块划分为256个2K字节页。** 从这个知识可以得到如下信息：

@@ -25,9 +25,9 @@ gitee(国内): https://gitee.com/wallace89/MCU_Develop/tree/main/bootloader04_st
 
 <br>
 
-# Keil设置Flash与RAM
+# 一、Keil设置Flash与RAM
 ---
-## App程序
+## 1.2、App程序
 
 ![App程序Flash设置](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250527105242.png)
 Flash区域按照《[[STM32F103_Bootloader程序开发02 - Bootloader程序架构与STM32F103的Flash内存规划]]》的规划进行设置，如上所示。
@@ -35,7 +35,7 @@ RAM分成两部分：
 - IRAM1给程序使用。
 - IRAM2的大小刚好是8个字节，这里定义了一个全局变量`update_flag`，记得勾选`No Init`。
 
-## bootloader程序
+## 1.3、bootloader程序
 
 ![Bootloader程序Flash设置](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250527105959.png)
 Flash区域按照《[[STM32F103_Bootloader程序开发02 - Bootloader程序架构与STM32F103的Flash内存规划]]》的规划进行设置，如上所示。
@@ -45,20 +45,20 @@ RAM分成两部分：
 
 <br>
 
-# 代码
+# 二、代码
 ---
 
-## App程序
+## 2.1、App程序
 
-### main.c
+### 2.1.1、main.c
 ![App程序main.c代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528100644.png)
 App代码只需要在main()设置中断向量表与开启全局中断即可。其他，跟普通程序一样。
 ![App程序功能示意](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528100612.png)
 App代码很简单，如果App能正常运行的话。电脑的串口助手会每个500ms收到一段来自STM32发出来的字符串"012345678"。接着，心跳LED灯会持续闪烁。
 
-## Bootloader程序
+## 2.2、Bootloader程序
 
-### app_jump.c
+### 2.2.1、app_jump.c
 
 源码如下：
 ```c
@@ -234,7 +234,7 @@ void IAP_Ready_To_Jump_App(void)
 ![安富莱教程截图1](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528113700.png)
 ![安富莱教程截图2](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528115420.png)
 
-### app_jump.h
+### 2.2.2、app_jump.h
 
 ```c
 /**
@@ -282,7 +282,7 @@ void IAP_Ready_To_Jump_App(void);
 
 ```
 
-### boot_entry.c
+### 2.2.3、boot_entry.c
 ```c
 #include "boot_entry.h"
 #include "flash_map.h"
@@ -323,7 +323,7 @@ static void _SystemStart(void)
 ```
 ![boot_entry.c关键代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528115903.png)
 
-### boot_entry.h
+### 2.2.4、boot_entry.h
 
 ```c
 #ifndef __BOOT_ENTRY_H
@@ -346,39 +346,39 @@ extern "C" {
 
 ```
 
-### main.c
+### 2.2.5、main.c
 ![bootloader的main.c代码](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528120209.png)
 
 <br>
 
-# 测试
+# 三、测试
 ---
-## 编译、烧录App
+## 3.1、编译、烧录App
 ![编译烧录App截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528135412.png)
 如上所示，先编译、烧录App到STM32F103ZET6上。
 
-## 编译、烧录bootloader
+## 3.2、编译、烧录bootloader
 ![编译烧录bootloader截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528135725.png)
 如上所示，编译、烧录bootloader程序到STM32F103ZET6上。
 
-## 观察bootloader程序的RTT打印
+## 3.3、观察bootloader程序的RTT打印
 ![bootloader RTT日志](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/bootloader_rtt_log.gif)
 如上，是MCU上电到跳转App之前的RTT log打印。
 
 ![RTT日志截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528140706.png)
 如上所示，当变量fre递增到5000(时间大概5S)时，调用函数`IAP_Read_To_Jump_App()`开始清理MCU环境，准备再入bootloader程序跳转App程序。
 
-## 观察串口助手
+## 3.4、观察串口助手
 ![串口助手截图](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528141153.png)
 如上所示，从电脑的串口助手收到的消息看来，App程序正在执行！
 
 <br>
 
-# 细节补充
+# 四、细节补充
 ---
-## 本章节最关键的函数IAP_Ready_To_Jump_App()
+## 4.1、本章节最关键的函数IAP_Ready_To_Jump_App()
 
-### 赋值 BOOTLOADER_RESET_MAGIC_WORD 的目的
+### 4.1.1、赋值 BOOTLOADER_RESET_MAGIC_WORD 的目的
 
 ![MAGIC_WORD赋值说明](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528141459.png)
 代码**IAP_SetUpdateFlag(BOOTLOADER_RESET_MAGIC_WORD)** 的作用是给全局变量update_flag赋值BOOTLOADER_RESET_MAGIC_WORD，目的是只是用来做"一次性信号"，告知系统下次上电或软复位后，bootloader判断此标志，执行清理环境、跳转APP等操作。
@@ -389,10 +389,10 @@ extern "C" {
 > "赋值为 BOOTLOADER_RESET_MAGIC_WORD，只是为了通过一次软复位，让MCU以最干净的环境跳转到APP，没有别的用途。"
 
 
-## App程序为什么要重新设置一遍SCB->VTOR?
+## 4.2、App程序为什么要重新设置一遍SCB->VTOR?
 `App初始化又把VTOR"改回去了"` 。App的启动代码（如startup_stm32f1xx.s）在执行时，很多IDE/库/工具链生成的启动代码默认会重新设置SCB->VTOR为0x08000000，即"复位地址"。所以，App程序必须手动再设置一遍中断向量表。
 ![VTOR设置说明](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528144703.png)
 
-## App程序为什么要打开全局中断__enable_irq()?
+## 4.3、App程序为什么要打开全局中断__enable_irq()?
 `bootloader程序在跳转App之前关闭了全局中断__disable_irq()。`App初始化不会自动打开全局中断。
 ![全局中断设置说明](https://raw.githubusercontent.com/q164129345/Obsidian_Repo/master/%E9%99%84%E4%BB%B6%E5%AD%98%E6%94%BE/Pasted%20image%2020250528144911.png)
